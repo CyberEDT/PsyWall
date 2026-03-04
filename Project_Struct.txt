@@ -1,0 +1,21 @@
+/server/
+├── analyzer/
+│   ├── patternEngine.js    (Core logic synthesize)
+│   ├── biasClassifier.js   (ML-assisted classification)
+│   └── scoringSystem.js    (Transparent risk scoring)
+├── api/
+│   ├── analyzeRoute.js     (Modular routing)
+│   └── middleware/
+│       ├── rateLimiter.js  (IP throttling)
+│       └── validation.js   (Sanitization & rules)
+├── utils/
+│   ├── patternLibrary.js   (Manipulation regex)
+│   ├── sentiment.js        (Placeholder)
+│   └── tokenizer.js        (Placeholder)
+├── extension/
+│   ├── manifest.json       (V3 Manifest)
+│   ├── contentScript.js    (DOM extraction)
+│   └── popupUI.jsx         (UI component)
+├── config/
+│   └── env.js              (Centralized settings)
+└── index.js                (Application Entry Point)
