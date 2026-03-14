@@ -7,7 +7,6 @@ import PrivacyPolicy from './components/PrivacyPolicy'
 import ToolInfo from './components/ToolInfo'
 import Documentation from './components/Documentation'
 import './App.css'
-import logo from './assets/logo/logo.png'
 
 function App() {
   const [inputText, setInputText] = useState('')
@@ -114,257 +113,332 @@ function App() {
 
       {/* CONTENT */}
       <div className="relative z-10 flex flex-col items-center p-8 min-h-[calc(100-4rem)] pointer-events-none">
-        <div className="w-full max-w-4xl flex justify-center mb-12">
-          {/* Logo only header as requested earlier */}
+        <div className="w-full max-w-4xl flex justify-center mb-8 pt-4">
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="pointer-events-auto"
+            className="pointer-events-auto flex flex-col items-center gap-2"
           >
-            <img src={logo} alt="PsyWall Logo" className="h-16 w-auto" />
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-500/10 rounded-xl border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                <Shield className="text-blue-400" size={32} />
+              </div>
+              <h1 className="text-4xl font-black tracking-tighter text-white">
+                PSY<span className="text-blue-500">WALL</span>
+              </h1>
+            </div>
+            <p className="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em]">Cognitive Intrusion Detection</p>
           </motion.div>
         </div>
 
-        <main className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl p-6 shadow-2xl pointer-events-auto">
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-slate-600 mb-2 uppercase tracking-wider flex items-center gap-2">
-              <Search size={14} />
-              Input Content for Analysis
-            </label>
-            <textarea
-              className="w-full h-48 bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none"
-              placeholder="Paste text here to detect psychological manipulation..."
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-            />
-          </div>
-
-          <button
-            onClick={handleAnalyze}
-            disabled={loading || !inputText}
-            className={`w-full py-4 rounded-xl font-bold text-white transition-all shadow-lg flex items-center justify-center gap-2 ${loading || !inputText
-              ? 'bg-slate-800 cursor-not-allowed opacity-50'
-              : 'bg-black hover:bg-slate-900 active:scale-[0.98]'
-              }`}
-          >
-            {loading ? (
-              <>
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                >
-                  <Activity size={20} />
-                </motion.div>
-                ANALYZING...
-              </>
-            ) : (
-              <>
-                <Zap size={20} />
-                RUN ANALYSIS
-              </>
-            )}
-          </button>
-
+        <main className="w-full max-w-2xl pointer-events-auto space-y-6">
           <AnimatePresence mode="wait">
-            {result && !result.error && (
+            {!result ? (
               <motion.div
-                key="result"
+                key="input-card"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                className="bg-slate-900/40 backdrop-blur-2xl border border-slate-800/50 rounded-3xl p-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+              >
+                <div className="mb-8">
+                  <div className="flex justify-between items-center mb-4">
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                      <Search size={14} className="text-blue-400" />
+                      Content Analysis Terminal
+                    </label>
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 rounded-full bg-red-500/50" />
+                      <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
+                      <div className="w-2 h-2 rounded-full bg-green-500/50" />
+                    </div>
+                  </div>
+                  <textarea
+                    className="w-full h-56 bg-black/40 border border-slate-800 focus:border-blue-500/50 rounded-2xl p-5 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:ring-4 focus:ring-blue-500/5 transition-all resize-none text-sm leading-relaxed font-mono"
+                    placeholder="Paste communication content here to detect psychological manipulation, logical fallacies, or persuasive techniques..."
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                  />
+                </div>
+
+                <button
+                  onClick={handleAnalyze}
+                  disabled={loading || !inputText}
+                  className={`w-full py-4.5 rounded-2xl font-black text-[13px] uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3 group relative overflow-hidden ${loading || !inputText
+                    ? 'bg-slate-800/50 text-slate-500 cursor-not-allowed border border-slate-700/50'
+                    : 'bg-white text-black hover:bg-blue-50 hover:scale-[1.01] active:scale-[0.99] border border-white'
+                    }`}
+                >
+                  {loading ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                      >
+                        <Activity size={18} />
+                      </motion.div>
+                      Decrypting Patterns...
+                    </>
+                  ) : (
+                    <>
+                      <Zap size={18} className="group-hover:text-blue-600 transition-colors" />
+                      Run Cognitive Audit
+                    </>
+                  )}
+                </button>
+              </motion.div>
+            ) : result?.error ? (
+              <motion.div
+                key="error-card"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="p-8 bg-red-500/5 border border-red-500/20 rounded-3xl text-red-400 text-sm font-mono flex flex-col items-center gap-4 text-center shadow-[0_0_30px_rgba(239,68,68,0.1)] backdrop-blur-xl"
+              >
+                <div className="p-3 bg-red-500/10 rounded-full">
+                  <AlertTriangle size={32} />
+                </div>
+                <div className="space-y-1">
+                  <p className="font-black uppercase tracking-widest text-xs opacity-50">System Failure</p>
+                  <p className="text-lg font-bold">COGNITIVE_DETECTOR_ERROR</p>
+                </div>
+                <div className="p-4 bg-black/40 border border-red-500/20 rounded-xl w-full text-left">
+                  {result.error}
+                </div>
+                <button
+                  onClick={() => setResult(null)}
+                  className="mt-4 text-xs font-black uppercase tracking-widest bg-white text-black px-6 py-2 rounded-full hover:bg-slate-200 transition-colors"
+                >
+                  Reset Terminal
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="result-card"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="mt-8 space-y-6"
+                className="space-y-6"
               >
-                {/* MANDATORY ALERT INTERFACE */}
-                <div className={`p-6 rounded-2xl border-2 transition-colors ${result.alertPayload.score > 40
-                  ? 'bg-red-500/10 border-red-500/40'
-                  : result.alertPayload.score > 10
-                    ? 'bg-yellow-500/10 border-yellow-500/40'
-                    : 'bg-emerald-500/10 border-emerald-500/40'
-                  }`}>
-                  <h2 className="text-xl font-black mb-4 tracking-tight flex items-center gap-2">
-                    {result.alertPayload.score > 40 ? (
-                      <AlertTriangle className="text-red-500" />
-                    ) : result.alertPayload.score > 10 ? (
-                      <AlertTriangle className="text-yellow-500" />
-                    ) : (
-                      <CheckCircle className="text-emerald-500" />
-                    )}
-                    {result.alertPayload.title}
-                  </h2>
-
-                  {result.alertPayload.tactics ? (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-sm font-bold text-slate-300">
-                        Manipulation Risk Score:
-                        <span className={result.alertPayload.score > 40 ? 'text-red-500' : 'text-slate-100'}>
-                          [{result.alertPayload.score}]
-                        </span>
-                      </div>
-
-                      <div className="space-y-3">
-                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Detected Tactics:</p>
-                        {result.alertPayload.tactics.map((t, i) => (
-                          <div key={i} className="pl-4 border-l-2 border-slate-700">
-                            <div className="text-sm font-bold text-slate-200">
-                              - {t.name} — <span className="text-blue-400">Confidence: [{t.confidence}%]</span>
-                            </div>
-                            <p className="text-xs text-slate-400 mt-1 italic">
-                              Explanation: {t.explanation}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-6 p-4 bg-slate-950/80 rounded-xl border border-slate-800">
-                        <p className="text-xs font-bold text-slate-500 mb-2 uppercase">Cognitive Impact Warning:</p>
-                        <p className="text-sm text-slate-200 font-medium leading-relaxed">
-                          "{result.alertPayload.impactWarning}"
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-slate-400 italic">
-                      {result.alertPayload.message}
-                    </p>
-                  )}
+                {/* Result Control Box */}
+                <div className="flex justify-between items-center bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 p-4 rounded-2xl">
+                  <button
+                    onClick={() => setResult(null)}
+                    className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-widest"
+                  >
+                    <ArrowLeft size={14} />
+                    New Audit
+                  </button>
+                  <div className="text-[10px] font-mono text-blue-500 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
+                    SCAN_ID: {Math.random().toString(36).substring(7).toUpperCase()}
+                  </div>
                 </div>
-                {/* Risk Dashboard */}
+
+                {/* Primary Alert */}
+                <div className={`relative overflow-hidden p-8 rounded-3xl border transition-all ${result.alertPayload.score > 40
+                  ? 'bg-red-500/5 border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]'
+                  : result.alertPayload.score > 10
+                    ? 'bg-yellow-500/5 border-yellow-500/20'
+                    : 'bg-emerald-500/5 border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.1)]'
+                  }`}>
+                  <div className={`absolute top-0 right-0 p-3 font-black text-[80px] opacity-5 select-none ${result.alertPayload.score > 40 ? 'text-red-500' : 'text-slate-500'
+                    }`}>
+                    {result.alertPayload.score}
+                  </div>
+
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className={`p-2 rounded-lg ${result.alertPayload.score > 40 ? 'bg-red-500/20 text-red-400' :
+                        result.alertPayload.score > 10 ? 'bg-yellow-500/20 text-yellow-400' :
+                          'bg-emerald-500/20 text-emerald-400'
+                        }`}>
+                        {result.alertPayload.score > 40 ? (
+                          <AlertTriangle size={24} />
+                        ) : result.alertPayload.score > 10 ? (
+                          <AlertTriangle size={24} />
+                        ) : (
+                          <CheckCircle size={24} />
+                        )}
+                      </div>
+                      <h2 className="text-2xl font-black text-white tracking-tight">
+                        {result.alertPayload.title}
+                      </h2>
+                    </div>
+
+                    {result.alertPayload.tactics ? (
+                      <div className="space-y-6">
+                        <div className="bg-black/20 rounded-2xl p-5 border border-white/5">
+                          <p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Detected Vectors:</p>
+                          <div className="space-y-4">
+                            {result.alertPayload.tactics.map((t, i) => (
+                              <div key={i} className="group">
+                                <div className="flex justify-between items-center mb-1">
+                                  <span className="text-sm font-bold text-slate-100 flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgb(59,130,246)]" />
+                                    {t.name}
+                                  </span>
+                                  <span className="text-[10px] font-mono font-black text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded border border-blue-400/20">
+                                    CONFIDENCE: {t.confidence}%
+                                  </span>
+                                </div>
+                                <p className="text-xs text-slate-400 pl-3.5 leading-relaxed mt-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                                  {t.explanation}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="p-5 bg-slate-950/40 rounded-2xl border border-slate-800/50">
+                          <p className="text-xs font-black text-slate-500 mb-2 uppercase tracking-tight flex items-center gap-2">
+                            <Info size={12} />
+                            Cognitive Impact Assessment
+                          </p>
+                          <p className="text-sm text-slate-300 font-medium leading-relaxed italic">
+                            &quot;{result.alertPayload.impactWarning}&quot;
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-slate-400 italic bg-black/20 p-4 rounded-xl border border-white/5">
+                        {result.alertPayload.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Advanced Metrics */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-slate-950/60 border border-slate-800 p-5 rounded-2xl backdrop-blur-md">
-                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-tighter mb-1">Overall Manipulation Score</p>
+                  <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 p-6 rounded-3xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-3xl transition-all group-hover:bg-blue-500/10" />
+                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-3">Threat Intensity</p>
                     <div className="flex items-end gap-3">
-                      <span className={`text-5xl font-black leading-none ${result.riskLevel === 'CRITICAL' ? 'text-red-500' :
+                      <span className={`text-6xl font-black leading-none ${result.riskLevel === 'CRITICAL' ? 'text-red-500' :
                         result.riskLevel === 'HIGH' ? 'text-orange-500' :
                           result.riskLevel === 'ELEVATED' ? 'text-yellow-500' : 'text-emerald-500'
                         }`}>
                         {Math.round(result.intensityScore * 100)}
                       </span>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-bold text-slate-400">/ 100</span>
-                        <span className={`text-[10px] font-black uppercase ${result.riskLevel === 'CRITICAL' ? 'text-red-500/80' :
-                          result.riskLevel === 'HIGH' ? 'text-orange-500/80' :
-                            result.riskLevel === 'ELEVATED' ? 'text-yellow-500/80' : 'text-emerald-400/80'
+                      <div className="flex flex-col mb-1">
+                        <span className="text-xs font-bold text-slate-600">/ 100</span>
+                        <span className={`text-[11px] font-black uppercase tracking-tighter ${result.riskLevel === 'CRITICAL' ? 'text-red-500' :
+                          result.riskLevel === 'HIGH' ? 'text-orange-500' :
+                            result.riskLevel === 'ELEVATED' ? 'text-yellow-500' : 'text-emerald-400'
                           }`}>
-                          {result.riskLevel} RISK
+                          {result.riskLevel} SEVERITY
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="bg-slate-950/60 border border-slate-800 p-5 rounded-2xl space-y-3 backdrop-blur-md">
-                    <p className="text-[10px] text-slate-500 uppercase font-bold mb-1">Scoring Transparency</p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center text-[10px] font-mono">
-                        <span className="text-slate-400">Emotional Intensity (40%)</span>
-                        <span className="text-blue-400">{result.riskAnalysis?.breakdown?.emotionalIntensity}%</span>
-                      </div>
-                      <div className="flex justify-between items-center text-[10px] font-mono">
-                        <span className="text-slate-400">Confidence Aggregation (40%)</span>
-                        <span className="text-purple-400">{result.riskAnalysis?.breakdown?.confidenceAggregation}%</span>
-                      </div>
-                      <div className="flex justify-between items-center text-[10px] font-mono">
-                        <span className="text-slate-400">Persuasion Density (20%)</span>
-                        <span className="text-emerald-400">{result.riskAnalysis?.breakdown?.densityFactor}%</span>
-                      </div>
-                    </div>
-                    <div className="pt-2 border-t border-slate-800/50">
-                      <p className="text-[9px] text-slate-600 font-mono italic">
-                        Method: {result.riskAnalysis?.formula}
-                      </p>
+                  <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 p-6 rounded-3xl space-y-4">
+                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Audit Breakdown</p>
+                    <div className="space-y-3">
+                      {[
+                        { label: 'Emotion Spectrum', val: result.riskAnalysis?.breakdown?.emotionalIntensity, color: 'bg-blue-500' },
+                        { label: 'Confidence Score', val: result.riskAnalysis?.breakdown?.confidenceAggregation, color: 'bg-purple-500' },
+                        { label: 'Tactical Density', val: result.riskAnalysis?.breakdown?.densityFactor, color: 'bg-emerald-500' }
+                      ].map((item, i) => (
+                        <div key={i} className="space-y-1.5">
+                          <div className="flex justify-between text-[10px] font-black uppercase tracking-tighter">
+                            <span className="text-slate-400">{item.label}</span>
+                            <span className="text-white">{item.val}%</span>
+                          </div>
+                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${item.val}%` }}
+                              className={`h-full ${item.color}`}
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Detections List */}
-                <div className="space-y-3">
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1">Tactical Detection Breakdown</h3>
-                  {result.detections?.length > 0 ? (
-                    result.detections.map((det, idx) => (
-                      <div key={idx} className="bg-slate-950/60 border border-slate-800/50 p-4 rounded-xl hover:border-slate-700 transition-colors backdrop-blur-md">
-                        <div className="flex justify-between items-start mb-2">
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className={`text-sm font-bold ${det.isLowCertainty ? 'text-slate-500 italic' : 'text-slate-200'}`}>
-                                {det.displayLabel}
-                              </span>
-                              {det.isAmbiguous && (
-                                <span className="text-[9px] bg-yellow-500/10 text-yellow-500 px-1.5 py-0.5 rounded border border-yellow-500/20 animate-pulse">
-                                  AMBIGUOUS
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs text-slate-500 mt-1">{det.description}</p>
-                          </div>
-                          <div className="flex flex-col items-end gap-1">
-                            <span className="px-2 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded text-[10px] font-mono whitespace-nowrap">
-                              {det.count}x MATCHES
-                            </span>
-                            <span className={`text-[10px] font-mono ${det.confidencePercent < 40 ? 'text-slate-600' : 'text-slate-400'}`}>
-                              CONFIDENCE: {det.confidencePercent}%
-                            </span>
-                          </div>
-                        </div>
-                        {det.advice && (
-                          <div className="mb-3 p-2 bg-yellow-500/5 border-l-2 border-yellow-500/30 text-[10px] text-yellow-500/80 italic">
-                            <Info size={10} className="inline mr-1" /> {det.advice}
-                          </div>
-                        )}
-                        {/* Context Samples */}
-                        <div className="mt-3 space-y-1.5">
-                          {det.evidence.slice(0, 2).map((ev, i) => (
-                            <div key={i} className="text-[11px] font-mono p-2 bg-slate-900/50 border-l-2 border-blue-500/50 text-slate-400 italic">
-                              {ev.context}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="p-8 text-center border border-dashed border-slate-800 rounded-xl text-slate-600 italic text-sm">
-                      No malicious psychological patterns detected in this sample.
+                {/* Sub-detections */}
+                {result.detections?.length > 0 && (
+                  <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 rounded-3xl overflow-hidden shadow-2xl">
+                    <div className="p-6 border-b border-slate-800/50 flex justify-between items-center">
+                      <h3 className="text-xs font-black text-slate-300 uppercase tracking-widest">Neural Breakdown</h3>
+                      <div className="text-[10px] font-mono text-slate-500">{result.detections.length} Signals Captured</div>
                     </div>
-                  )}
-                </div>
+                    <div className="divide-y divide-slate-800/50">
+                      {result.detections.map((det, idx) => (
+                        <div key={idx} className="p-6 hover:bg-white/5 transition-colors group">
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-1">
+                                <span className={`text-sm font-black tracking-tight ${det.isLowCertainty ? 'text-slate-500 italic' : 'text-slate-100'}`}>
+                                  {det.displayLabel}
+                                </span>
+                                {det.isAmbiguous && (
+                                  <span className="text-[9px] bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded-full border border-yellow-500/20 font-black">
+                                    AMBIGUOUS
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-[13px] text-slate-400 leading-relaxed font-medium opacity-70 group-hover:opacity-100 transition-opacity pr-8">
+                                {det.description}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-xs font-black text-white mb-1">{det.count}x</div>
+                              <div className="text-[9px] font-mono text-slate-600 uppercase">Instances</div>
+                            </div>
+                          </div>
 
-                <div className="p-3 bg-blue-500/5 border border-blue-500/10 rounded-lg">
-                  <p className="text-[10px] text-blue-400/80 font-mono italic">
-                    {result.summary}
+                          {det.advice && (
+                            <div className="mt-4 p-3 bg-blue-500/5 border border-blue-500/20 rounded-xl flex items-start gap-3">
+                              <Info size={14} className="text-blue-400 shrink-0 mt-0.5" />
+                              <p className="text-[11px] text-blue-300/80 font-medium leading-normal italic">
+                                {det.advice}
+                              </p>
+                            </div>
+                          )}
+
+                          <div className="mt-4 flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                            {det.evidence.slice(0, 2).map((ev, i) => (
+                              <div key={i} className="text-[10px] font-mono px-3 py-2 bg-black/40 border border-slate-800/50 text-slate-400 rounded-lg whitespace-nowrap opacity-60 hover:opacity-100 transition-opacity">
+                                &quot;{ev.context.length > 40 ? ev.context.substring(0, 40) + '...' : ev.context}&quot;
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="p-6 bg-blue-500/5 border border-blue-500/10 rounded-3xl text-center">
+                  <p className="text-[11px] text-blue-400/60 font-mono italic leading-relaxed">
+                    NEURAL_LOG: {result.summary}
                   </p>
                 </div>
-              </motion.div>
-            )}
-
-            {result?.error && (
-              <motion.div
-                key="error"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="mt-8 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm font-mono flex items-center gap-3"
-              >
-                <AlertTriangle size={18} />
-                <span>DETECTOR ERROR: {result.error}</span>
               </motion.div>
             )}
           </AnimatePresence>
         </main>
 
-        <footer className="mt-auto pt-12 pb-4 text-slate-500 text-xs font-mono text-center space-y-2 pointer-events-auto">
-          <div>© 2024 CyberEDT. All rights reserved</div>
-          <div className="flex justify-center gap-4">
+        <footer className="mt-20 pb-8 text-slate-600 text-[11px] font-mono text-center space-y-3 pointer-events-auto">
+          <div className="flex justify-center flex-wrap gap-6 items-center">
+            <span className="font-bold text-slate-800 opacity-50 uppercase tracking-[0.2em]">CyberEDT Security Infrastructure</span>
+            <div className="w-1 h-1 rounded-full bg-slate-800" />
             <button
               onClick={() => setCurrentView('privacy')}
-              className="hover:text-slate-400 transition-colors"
+              className="hover:text-blue-400 transition-colors uppercase tracking-widest"
             >
-              Privacy Policy
+              Privacy Protocol
             </button>
-            <span>|</span>
+            <div className="w-1 h-1 rounded-full bg-slate-800" />
             <button
               onClick={() => setCurrentView('terms')}
-              className="hover:text-slate-400 transition-colors"
+              className="hover:text-blue-400 transition-colors uppercase tracking-widest"
             >
-              Terms of Use
+              Terms of Engagement
             </button>
           </div>
+          <div className="opacity-40">© 2024 Cognitive Defense Systems. All rights reserved.</div>
         </footer>
       </div>
     </div >

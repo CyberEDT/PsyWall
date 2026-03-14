@@ -103,7 +103,7 @@ Structure JSON Report / UI Visualization Output`}
                     >
                         <h2 className="text-2xl font-bold text-white mb-8 border-b border-slate-800 pb-4">Detection Engine</h2>
                         <div className="space-y-6 text-sm text-slate-400">
-                            <p>The PsyWall engine operates on a deterministic heuristic model, avoiding the interpretability issues often associated with "black box" machine learning approaches. This ensures that every detection can be traced back to specific linguistic evidence.</p>
+                            <p>The PsyWall engine operates on a deterministic heuristic model, avoiding the interpretability issues often associated with &quot;black box&quot; machine learning approaches. This ensures that every detection can be traced back to specific linguistic evidence.</p>
                             <ul className="list-none space-y-4">
                                 <li className="pl-4 border-l-2 border-slate-800">
                                     <strong className="text-slate-200">Heuristic Trigger Detection:</strong> Predefined rulesets that identify high-probability manipulation markers.
@@ -291,8 +291,8 @@ Structure JSON Report / UI Visualization Output`}
                                 key={s.id}
                                 onClick={() => setActiveSection(s.id)}
                                 className={`text-left text-sm py-2 px-3 rounded transition-all border-l-2 ${activeSection === s.id
-                                        ? 'bg-blue-500/10 text-blue-400 border-blue-500 font-bold'
-                                        : 'text-slate-500 border-transparent hover:bg-slate-800/50 hover:text-white'
+                                    ? 'bg-blue-500/10 text-blue-400 border-blue-500 font-bold'
+                                    : 'text-slate-500 border-transparent hover:bg-slate-800/50 hover:text-white'
                                     }`}
                             >
                                 {s.title}

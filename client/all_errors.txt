@@ -1,0 +1,309 @@
+
+C:\Users\ny336\Desktop\Projects\Cyber Security\Psyco_Firewall\client\src\App.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\ny336\Desktop\Projects\Cyber Security\Psyco_Firewall\client\src\components\Documentation.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\ny336\Desktop\Projects\Cyber Security\Psyco_Firewall\client\src\components\LiquidEther.jsx
+    69:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+   67 |         const bgVec4 = new THREE.Vector4(0, 0, 0, 0); // always transparent
+   68 |
+>  69 |         class CommonClass {
+      |         ^^^^^^^^^^^^^^^^^^^
+>  70 |             constructor() {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  71 |                 this.width = 0;
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 111 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 112 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  113 |         const Common = new CommonClass();
+  114 |
+  115 |         class MouseClass {
+
+                                     react-hooks/unsupported-syntax
+   115:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  113 |         const Common = new CommonClass();
+  114 |
+> 115 |         class MouseClass {
+      |         ^^^^^^^^^^^^^^^^^^
+> 116 |             constructor() {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 117 |                 this.mouseMoved = false;
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 255 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 256 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  257 |         const Mouse = new MouseClass();
+  258 |
+  259 |         class AutoDriver {
+
+                                                                  react-hooks/unsupported-syntax
+   259:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  257 |         const Mouse = new MouseClass();
+  258 |
+> 259 |         class AutoDriver {
+      |         ^^^^^^^^^^^^^^^^^^
+> 260 |             constructor(mouse, manager, opts) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 261 |                 this.mouse = mouse;
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 323 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 324 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  325 |
+  326 |         const face_vert = `
+  327 |   attribute vec3 position;
+
+     react-hooks/unsupported-syntax
+   497:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  495 | `;
+  496 |
+> 497 |         class ShaderPass {
+      |         ^^^^^^^^^^^^^^^^^^
+> 498 |             constructor(props) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 499 |                 this.props = props || {};
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 521 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 522 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  523 |
+  524 |         class Advection extends ShaderPass {
+  525 |             constructor(simProps) {
+
+                                                                      react-hooks/unsupported-syntax
+   524:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  522 |         }
+  523 |
+> 524 |         class Advection extends ShaderPass {
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 525 |             constructor(simProps) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 526 |                 super({
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 567 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 568 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  569 |
+  570 |         class ExternalForce extends ShaderPass {
+  571 |             constructor(simProps) {
+
+                             react-hooks/unsupported-syntax
+   570:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  568 |         }
+  569 |
+> 570 |         class ExternalForce extends ShaderPass {
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 571 |             constructor(simProps) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 572 |                 super({ output: simProps.dst });
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 611 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 612 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  613 |
+  614 |         class Viscous extends ShaderPass {
+  615 |             constructor(simProps) {
+
+  react-hooks/unsupported-syntax
+   614:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  612 |         }
+  613 |
+> 614 |         class Viscous extends ShaderPass {
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 615 |             constructor(simProps) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 616 |                 super({
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 652 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 653 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  654 |
+  655 |         class Divergence extends ShaderPass {
+  656 |             constructor(simProps) {
+
+                                    react-hooks/unsupported-syntax
+   655:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  653 |         }
+  654 |
+> 655 |         class Divergence extends ShaderPass {
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 656 |             constructor(simProps) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 657 |                 super({
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 675 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 676 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  677 |
+  678 |         class Poisson extends ShaderPass {
+  679 |             constructor(simProps) {
+
+                                 react-hooks/unsupported-syntax
+   678:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  676 |         }
+  677 |
+> 678 |         class Poisson extends ShaderPass {
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 679 |             constructor(simProps) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 680 |                 super({
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 712 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 713 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  714 |
+  715 |         class Pressure extends ShaderPass {
+  716 |             constructor(simProps) {
+
+                                      react-hooks/unsupported-syntax
+   715:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  713 |         }
+  714 |
+> 715 |         class Pressure extends ShaderPass {
+      |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 716 |             constructor(simProps) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 717 |                 super({
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 737 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 738 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  739 |
+  740 |         class Simulation {
+  741 |             constructor(options) {
+
+                                                      react-hooks/unsupported-syntax
+   740:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  738 |         }
+  739 |
+> 740 |         class Simulation {
+      |         ^^^^^^^^^^^^^^^^^^
+> 741 |             constructor(options) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 742 |                 this.options = {
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 881 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 882 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  883 |
+  884 |         class Output {
+  885 |             constructor() {
+
+                                                                                              react-hooks/unsupported-syntax
+   884:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+  882 |         }
+  883 |
+> 884 |         class Output {
+      |         ^^^^^^^^^^^^^^
+> 885 |             constructor() {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 886 |                 this.init();
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 922 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 923 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  924 |
+  925 |         class WebGLManager {
+  926 |             constructor(props) {
+
+                                                                                                                           react-hooks/unsupported-syntax
+   925:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+   923 |         }
+   924 |
+>  925 |         class WebGLManager {
+       |         ^^^^^^^^^^^^^^^^^^^^
+>  926 |             constructor(props) {
+       | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  927 |                 this.props = props;
+       …
+       | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 1002 |             }
+       | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 1003 |         }
+       | ^^^^^^^^^^ Inline `class` declarations are not supported
+  1004 |
+  1005 |         const container = mountRef.current;
+  1006 |         container.style.position = container.style.position || 'relative';
+
+           react-hooks/unsupported-syntax
+   999:26  error    'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             no-unused-vars
+  1079:26  error    'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             no-unused-vars
+  1086:26  error    'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             no-unused-vars
+
+C:\Users\ny336\Desktop\Projects\Cyber Security\Psyco_Firewall\client\src\components\PrivacyPolicy.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\ny336\Desktop\Projects\Cyber Security\Psyco_Firewall\client\src\components\TermsOfUse.jsx
+  1:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\ny336\Desktop\Projects\Cyber Security\Psyco_Firewall\client\src\components\ToolInfo.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+✖ 21 problems (8 errors, 13 warnings)
+

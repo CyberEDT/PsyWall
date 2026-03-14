@@ -32,7 +32,7 @@ export default function TermsOfUse() {
         <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
           <h2 className="text-2xl font-bold text-white mb-4">1. Introduction</h2>
           <div className="space-y-3 text-sm leading-relaxed">
-            <p>PsyWall ("Service") is a digital content analysis tool operated and owned by PsyWall Team ("Company", "we", "us", "our").</p>
+            <p>PsyWall (&quot;Service&quot;) is a digital content analysis tool operated and owned by PsyWall Team (&quot;Company&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;).</p>
             <p>By accessing or using the Service, you agree to these Terms of Use. If you do not agree, you must discontinue use immediately.</p>
           </div>
         </section>
@@ -121,7 +121,7 @@ export default function TermsOfUse() {
               <li>Misinterpretation of analysis</li>
               <li>Third-party misuse</li>
             </ul>
-            <p className="mt-4 font-mono text-xs text-slate-500">The Service is provided "AS IS" and "AS AVAILABLE."</p>
+            <p className="mt-4 font-mono text-xs text-slate-500">The Service is provided &quot;AS IS&quot; and &quot;AS AVAILABLE.&quot;</p>
           </div>
         </section>
 
@@ -155,7 +155,7 @@ export default function TermsOfUse() {
         <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
           <h2 className="text-2xl font-bold text-white mb-4">9. Governing Law</h2>
           <div className="space-y-3 text-sm leading-relaxed">
-            <p>These Terms shall be governed by the laws applicable to PsyWall Team's registered jurisdiction.</p>
+            <p>These Terms shall be governed by the laws applicable to PsyWall Team&apos;s registered jurisdiction.</p>
           </div>
         </section>
       </div>

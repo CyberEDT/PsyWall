@@ -106,7 +106,7 @@ const ToolInfo = () => {
             <section className="mb-24 max-w-4xl mx-auto text-center">
                 <h2 className="text-sm font-black text-blue-500 uppercase tracking-[0.3em] mb-8">The Cognitive Threat Landscape</h2>
                 <p className="text-lg leading-relaxed text-slate-400 italic">
-                    "In an era of algorithmic persuasion, the primary security vulnerability is no longer the network, but the human mind."
+                    &quot;In an era of algorithmic persuasion, the primary security vulnerability is no longer the network, but the human mind.&quot;
                 </p>
                 <p className="mt-8 text-slate-400 leading-relaxed">
                     Digital manipulation has moved beyond simple marketing—it now shapes financial markets, political discourse, and institutional trust. By quantifying these invisible triggers, PsyWall empowers users to reclaim cognitive autonomy from automated influence systems and predatory communication strategies.
