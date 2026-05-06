@@ -207,7 +207,7 @@ Use responsibly and ethically.
 
 👨‍💻 Author
 
-Nitesh
+Nitesh Yadav
 Cybersecurity | Cloud Security | Security Research
 
 Founder — CyberEDT
