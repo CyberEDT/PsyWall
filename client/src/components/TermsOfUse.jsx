@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { Shield, ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
+import logoImage from '../assets/logo/logo.png'
 
 const today = new Date().toLocaleDateString('en-US', {
   year: 'numeric',
@@ -15,13 +16,16 @@ export default function TermsOfUse() {
       className="space-y-8"
     >
       <header className="text-center mb-12">
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-4xl font-black bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-4 flex items-center justify-center gap-3"
+        <motion.div
+           initial={{ opacity: 0, scale: 0.95 }}
+           animate={{ opacity: 1, scale: 1 }}
+           className="flex flex-col items-center justify-center gap-4 mb-4"
         >
-          🛡️ PSYWALL TERMS
-        </motion.h1>
+           <img src={logoImage} alt="PsyWall Logo" className="h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]" />
+           <h1 className="text-4xl font-black bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+             TERMS
+           </h1>
+        </motion.div>
         <div className="text-slate-400 space-y-1">
           <p className="text-sm">Last Updated: {today}</p>
           <p className="text-sm">Operated by: PsyWall Team</p>

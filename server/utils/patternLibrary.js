@@ -1,73 +1,183 @@
 /**
- * Manipulation Pattern Library
- * Optimized: Precompiled Regex markers for high-performance scanning.
+ * Manipulation Pattern Library v3.1
+ * Context-aware patterns with:
+ *  - Primary match regex (the manipulative signal) — EXPANDED for wider natural language coverage
+ *  - Neutralizer regex (benign context that reduces confidence)
+ *  - Intent amplifiers (co-occurring signals that raise suspicion)
+ *  - Per-pattern base weight
+ *  - isAdvanced flag (triggers higher score multipliers for compound detection)
+ *
+ * Categories:
+ *   CORE (6):    FEAR_AMPLIFICATION, SCARCITY_URGENCY, AUTHORITY_EXPLOITATION,
+ *                SOCIAL_PROOF, RECIPROCITY_BAITING, COMMITMENT_TRAPPING
+ *
+ *   ADVANCED (8): SEXTORTION, EMOTIONAL_DEPENDENCY, GUILT_SYMPATHY_PRESSURE,
+ *                 GASLIGHTING, TRUST_GROOMING, COGNITIVE_OVERLOAD,
+ *                 SOCIAL_OBLIGATION, IDENTITY_PERSONALIZATION
  */
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CORE PATTERNS  (expanded v3.1 — broader natural language coverage)
+// ─────────────────────────────────────────────────────────────────────────────
 export const MANIPULATION_PATTERNS = {
-    URGENCY: {
-        label: 'Urgency Pressure',
-        weight: 0.85,
-        regex: /\b(act now|limited time|expires|last chance|hurry|don't wait|only a few hours|deadline|must act|immediately|today only|within the next (hour|15 minutes|30 minutes)|expiring today|final notice|final notification|scheduled within|before 5:00 PM|urgent response required|quick confirmation|finalize shortly|before my [0-9]+ PM meeting)\b/gi,
-        description: 'Attempts to bypass rational thought by creating artificial time pressure.'
-    },
-    FEAR: {
+
+    FEAR_AMPLIFICATION: {
         label: 'Fear Amplification',
-        weight: 0.95,
-        regex: /\b(danger|threat|warning|scary|terrifying|killer|victim|attack|crisis|emergency|collapse|ruin|protect yourself|stay safe|account suspension|unrecognized device|account termination|payment delay|data loss|deletion|compromised|legal notice|penalty|enforcement|legal escalation|suspension|breach detected|risk exposure|multiple login attempts|asset seizure|formal investigation|returned to sender|legal proceedings|non-compliance)\b/gi,
-        description: 'Uses emotional distress or anxiety to influence decision making.'
+        weight: 0.90,
+        isAdvanced: false,
+        regex: /\b(account\s+(?:suspension|termination|compromised|locked|blocked|frozen|disabled|closed|flagged|restricted|under\s+review)|unrecognized\s+(?:device|login|access|sign-?in)|multiple\s+(?:failed\s+)?(?:login|sign-?in|access)\s+attempts|(?:breach|intrusion|hack)\s+(?:detected|identified|found|alert)|unauthorized\s+(?:access|login|use|activity|transaction)|data\s+(?:loss|breach|deletion|theft|leak|exposure)|legal\s+(?:notice|escalation|proceedings|action|threat|consequences)|asset\s+(?:seizure|forfeiture|freeze)|formal\s+(?:investigation|complaint|charges?)|penalty\s+(?:will\s+apply|enforced|incurred)|non-compliance\s+(?:may|will)|risk\s+of\s+(?:account|data|losing)|your\s+(?:funds?|account|data|access|files?|money|assets?)\s+(?:is|are|will\s+be|could\s+be)\s+(?:at\s+risk|suspended|lost|frozen|seized|deleted|compromised|locked|gone)|you\s+(?:must|need\s+to|have\s+to|are\s+required\s+to)\s+act\s+(?:now|immediately|urgently|right\s+away|at\s+once)|failure\s+to\s+(?:respond|comply|act|verify|confirm)\s+(?:will|may|could|might)|we\s+regret\s+to\s+inform\s+(?:you|the\s+(?:customer|user|account\s+holder))|this\s+is\s+your\s+(?:final|last)\s+(?:warning|notice|chance|opportunity|reminder)|consequences\s+(?:will|may|could)\s+(?:be|follow|include)|devastating\s+(?:losses?|consequences?|impact|effects?)|do\s+not\s+(?:ignore|delay|dismiss|overlook)\s+this|your\s+family\s+(?:will\s+suffer|is\s+at\s+risk|could\s+be\s+affected)|protect\s+yourself\s+(?:now|immediately|today|before\s+it'?s?\s+too\s+late)|wake\s+up\s+(?:to\s+the\s+truth|people|sheeple)|they\s+(?:won'?t\s+tell\s+you|are\s+hiding|don'?t\s+want\s+you\s+to\s+know)|shameful|outrageous\s+(?:behavior|conduct|activity)|betrayal|you\s+(?:are\s+being|have\s+been)\s+(?:watched|monitored|tracked|surveilled|targeted|scammed|hacked|compromised)|your\s+(?:identity|personal\s+information|private\s+data|credentials)\s+(?:has|have)\s+been\s+(?:stolen|compromised|leaked|exposed|sold)|we\s+(?:have\s+detected|found|identified|noticed)\s+(?:suspicious|unusual|unauthorized|illegal)\s+(?:activity|behavior|access|transactions?|use)\s+(?:on|from|with)\s+your|(?:criminal|legal|law\s+enforcement)\s+(?:action|investigation|charges?|consequences?)\s+(?:may|will|could)\s+follow|your\s+(?:reputation|career|relationships?|life)\s+(?:could\s+be|will\s+be|is)\s+(?:ruined|destroyed|affected|at\s+risk))\b/gi,
+        neutralizer: /\b(for\s+example|hypothetically|case\s+study|research\s+(?:shows?|paper|study|article)|according\s+to\s+(?:the\s+)?(?:report|study|survey|article)|in\s+this\s+scenario|as\s+an\s+(?:example|illustration|case)|awareness\s+(?:training|campaign|program)|educational\s+(?:purpose|material|content|context)|policy\s+(?:update|notice|change|document)|system\s+(?:maintenance|update|upgrade)|scheduled\s+(?:maintenance|downtime|update)|we\s+(?:identified|detected)\s+(?:and\s+)?(?:resolved|fixed|addressed|mitigated)|this\s+is\s+(?:a\s+)?(?:test|drill|simulation|demonstration)|password\s+expiry\s+(?:reminder|notification|notice)|security\s+(?:tip|reminder|best\s+practice|recommendation)|how\s+to\s+(?:protect|secure|prevent|avoid))\b/gi,
+        amplifiers: /\b(click\s+(?:here|below|this\s+link|the\s+(?:link|button))|follow\s+the\s+link|tap\s+(?:here|below)|verify\s+(?:now|immediately|your\s+(?:account|identity|details|information))|confirm\s+(?:your|account|payment|details|identity|information)|update\s+your\s+(?:information|password|details|payment|billing)|act\s+(?:now|immediately|quickly|fast|today)|do\s+not\s+(?:delay|wait|ignore|hesitate)|time\s+is\s+(?:running\s+out|limited|critical|of\s+the\s+essence)|within\s+(?:24|48|72|12|6)\s+hours|before\s+(?:midnight|today|tomorrow|it'?s?\s+too\s+late)|reply\s+(?:now|immediately|urgently)|send\s+(?:your\s+)?(?:details|information|confirmation|response)|respond\s+(?:now|immediately|urgently|within)|call\s+(?:us|now|immediately|urgently)\s+(?:at|on))\b/gi,
+        description: 'Generates disproportionate anxiety about a stated or implied threat to motivate compliance.'
     },
-    AUTHORITY: {
-        label: 'Authority Bias',
-        weight: 0.7,
-        regex: /\b(experts say|doctors recommend|scientists prove|official source|verified|renowned|leading|academic|verified by|authorized|regulatory compliance|legally required|mandatory update|official policy|Security Operations Team|Human Resources|Investment Advisory Team|hiring board|Executive Recruitment Team|CEO|CFO|Taxpayer|IRS|federal guidelines|internal audit|regulators require|compliance mandate|Federal Tax Statute|Post Office|Board of Directors|Finance Department)\b/gi,
-        description: 'Uses perceived status or expertise to discourage questioning of information.'
-    },
-    SCARCITY: {
-        label: 'Scarcity Modeling',
-        weight: 0.8,
-        regex: /\b(running out|low stock|exclusive|rare|hard to find|only [0-9]+ left|unique opportunity|not available elsewhere|limited allocation|Only [0-9]+ allocations|early participation|confidential|shortlist closes|early access|discounted pricing|surge dramatically|private token sale)\b/gi,
-        description: 'Creates a sense of shortage to increase perceived value.'
-    },
-    SOCIAL_PROOF: {
-        label: 'Social Proof / Bandwagon',
-        weight: 0.6,
-        regex: /\b(everyone is|join thousands|trusted by|join now|[0-9]+ users|millions|people are talking|don't be left out|thousands of investors|thousands have already|most users|industry leaders)\b/gi,
-        description: 'Uses group consensus to validate a claim without evidence.'
-    },
-    RAGE_TRIGGER: {
-        label: 'Rage / Outrage Trigger',
-        weight: 0.95,
-        regex: /\b(outrageous|disgrace|unacceptable|betrayal|shameful|insult|disgusting|furious|horrifying|wake up|sheep)\b/gi,
-        description: 'Designed to provoke anger or indignation to increase engagement/sharing.'
-    },
-    DECEPTIVE_IMPERSONATION: {
-        label: 'Institutional Impersonation',
-        weight: 0.8,
-        regex: /\b(Dear Customer|Dear User|Valued Customer|Dear Account Holder|Security Department|Compliance Department|Fraud Detection System|Security Team|IT Support|Billing Department|Support Desk|Service Desk|Administrator|Account Verification|Vendor Management|Payroll Department|IT Helpdesk|Mailbox Support|Post Office Delivery)\b/gi,
-        description: 'Uses generic greetings or fake institutional titles to establish false trust.'
-    },
-    THREAT_CONSEQUENCE: {
-        label: 'Coercive Consequence',
-        weight: 0.95,
-        regex: /\b(account freezing|permanently restricted|unauthorized transaction|account suspended|unusual activity|suspicious login|verify your identity|prevent access loss|identity theft|security breach|compromised|action required|final notice|urgent notice)\b/gi,
-        description: 'Threatens negative outcomes to force immediate, unthinking action.'
-    },
-    CREDENTIAL_HARVESTING: {
-        label: 'Data Extraction Hook',
-        weight: 0.95,
-        regex: /\b(confirm your account|verify your details|login to secure|click below|secure your funds|update your information|confirm now|action required immediately|validate your account|click here|follow the link|update payment|verification form)\b/gi,
-        description: 'Directs users toward specific actions intended to capture sensitive information.'
-    },
-    IRREVERSIBILITY: {
-        label: 'Irreversibility Framing',
-        weight: 0.9,
-        regex: /\b(irreversible|permanent data loss|permanently removed|cannot be undone|access is permanently restricted|forfeiture|final notification)\b/gi,
-        description: 'Frames a situation as unchangeable to increase anxiety and prevent second thoughts.'
-    },
-    EMOTIONAL_EXPLOITATION: {
-        label: 'Emotional Manipulation',
+
+    SCARCITY_URGENCY: {
+        label: 'Scarcity and Urgency Framing',
         weight: 0.85,
-        regex: /\b(help is needed|devastating losses|others suffer|save lives|protect what matters|your family|guilt|don't let them down)\b/gi,
-        description: 'Uses guilt, sympathy, or moral pressure to bypass logical analysis.'
+        isAdvanced: false,
+        regex: /\b(act\s+now|take\s+action\s+(?:now|immediately|today|right\s+away)|limited\s+(?:time|offer|spots?|seats?|slots?|availability|supply|stock|edition|access|places?)|(?:offer\s+)?expires?\s+(?:soon|today|tonight|tomorrow|at\s+midnight|in\s+[0-9]+\s+(?:hours?|minutes?|days?))|last\s+(?:chance|call|opportunity|day|few\s+(?:spots?|places?|seats?))|(?:only\s+)?(?:[0-9]+\s+)?(?:hours?|minutes?|days?)\s+(?:left|remaining|to\s+go)|don'?t\s+(?:wait|delay|miss\s+(?:out|this\s+opportunity|your\s+chance)|let\s+(?:this|it)\s+(?:pass|expire|go))|must\s+act\s+(?:now|immediately|today|before)|(?:ends?|closing|expiring|finishes?)\s+(?:soon|today|tonight|at\s+midnight|this\s+(?:week|month|friday|monday))|today\s+only|this\s+(?:week|weekend|month)\s+only|within\s+(?:the\s+next\s+)?(?:[0-9]+\s+)?(?:hours?|minutes?|days?)|final\s+(?:notice|notification|reminder|call|offer|chance|hours?|warning)|urgent(?:ly)?\s+(?:response|action|attention|reply)\s+required|urgent(?:ly)?\s+(?:need|needed|required)|don'?t\s+miss\s+(?:out|this|your\s+chance)|running\s+out\s+(?:of\s+time|fast|quickly)|exclusive\s+(?:access|offer|invitation|deal)\s+(?:ends?|closing|expiring)\s+(?:soon|today|tonight)|early\s+(?:access|participation|bird)\s+(?:ends?|closes?|expires?)\s+(?:soon|today)|only\s+[0-9]+\s+(?:left|remaining|spots?|allocations?|places?)|shortlist\s+closes?|discounted\s+(?:pricing|rate|price)\s+(?:ends?|expires?|available\s+for\s+(?:a\s+)?limited\s+time)|reply\s+by|respond\s+before|(?:limited\s+time\s+)?(?:discount|deal|offer|special)\s+(?:expires?|ends?|available\s+(?:only\s+)?(?:today|tonight|this\s+week))|hurry|time\s+(?:is\s+(?:running\s+out|limited)|sensitive\s+(?:offer|matter|request))|respond\s+(?:urgently|immediately|now|asap|as\s+soon\s+as\s+possible)|(?:24|48|72)\s+hour\s+(?:sale|offer|deal|window|deadline)|closing\s+(?:this\s+)?(?:friday|monday|week|today|tonight))\b/gi,
+        neutralizer: /\b(registration\s+(?:deadline|closes?|period)|application\s+(?:deadline|due\s+(?:date|by)|window)|(?:sale|event|promotion|conference)\s+(?:ends?|closes?)\s+on\s+[a-z]|season\s+(?:ends?|sale|ticket)|fiscal\s+(?:year|quarter)\s+(?:ends?|close)|enrollment\s+(?:period|window|closes?)|subscription\s+(?:renewal|expires?)\s+on\s+[a-z0-9]|project\s+(?:deadline|due\s+date|milestone)|course\s+(?:registration|enrollment)\s+(?:closes?|deadline)|booking\s+(?:deadline|cutoff|closes?))\b/gi,
+        amplifiers: /\b(click\s+(?:here|below|this\s+link)|claim\s+(?:your|now|today|immediately)|secure\s+your\s+(?:spot|place|seat|access)|reserve\s+(?:now|today|immediately)|purchase\s+now|buy\s+now|order\s+now|sign\s+up\s+now|register\s+(?:now|today|immediately)|grab\s+(?:your|this)|don'?t\s+(?:miss|lose)\s+(?:out|this\s+(?:opportunity|chance|deal))|while\s+(?:supplies|stocks?|offer|they)\s+last|get\s+(?:yours?|started|access)\s+(?:now|today|immediately))\b/gi,
+        description: 'Creates artificial time or resource pressure to compress decision time and suppress critical reasoning.'
+    },
+
+    AUTHORITY_EXPLOITATION: {
+        label: 'Authority Exploitation',
+        weight: 0.75,
+        isAdvanced: false,
+        regex: /\b((?:from\s+(?:the\s+)?)?(?:Security\s+(?:Operations\s+)?(?:Team|Center|Department)|Human\s+Resources(?:\s+Department)?|IT\s+(?:Support|Helpdesk|Department|Team|Security)|Compliance\s+(?:Department|Team|Office)|Fraud\s+(?:Detection\s+)?(?:System|Team|Department)|Billing\s+(?:Department|Team)|Payroll\s+(?:Department|Team)|Finance\s+(?:Department|Team)|Legal\s+(?:Department|Team|Counsel)|Executive\s+(?:Team|Office|Leadership)|Board\s+of\s+Directors|Senior\s+(?:Management|Leadership|Team)|Account\s+(?:Management|Security)\s+Team|Trust\s+(?:and\s+Safety|Team)|Policy\s+(?:Enforcement|Team))|(?:on\s+behalf\s+of\s+)?(?:CEO|CFO|CTO|COO|Director|VP|Senior\s+(?:Vice\s+)?President|Department\s+Head)|(?:your\s+)?(?:account\s+)?(?:has\s+been\s+)?(?:flagged|suspended|restricted|locked|frozen|terminated|compromised|breached|reviewed|escalated|reported)\s+by|regulatory\s+(?:compliance|authority|requirement|body)|legally\s+(?:required|mandated|obligated|binding)|mandatory\s+(?:update|compliance|verification|action|review|training)|official\s+(?:notice|warning|policy|communication|message|alert|mandate)|(?:this\s+is\s+)?(?:an\s+)?official\s+(?:communication|message|notice|letter|warning)|this\s+(?:message|email|communication|letter|notification)\s+is\s+from|we\s+are\s+(?:contacting|reaching\s+out\s+to)\s+you\s+(?:from|on\s+behalf\s+of|regarding)|your\s+(?:bank|provider|employer|company|institution|service\s+provider|organization)\s+(?:requires?|has\s+(?:requested|detected|identified|flagged|noted))|you\s+(?:are\s+required|must|need\s+to|are\s+obligated)\s+to\s+(?:verify|confirm|update|provide|submit|comply\s+with)|as\s+per\s+our\s+(?:policy|records|terms|agreement|guidelines)|(?:government|federal|state|national)\s+(?:mandate|requirement|policy|regulation|authority)|(?:bank|financial\s+institution|payment\s+provider)\s+(?:policy|requirement|notification|alert))\b/gi,
+        neutralizer: /\b(this\s+(?:article|guide|tutorial|post|report|blog)\s+(?:is\s+(?:from|by|written\s+by)|discusses?|covers?|explains?|describes?)|(?:the\s+)?(?:study|research|report|paper|publication)\s+(?:by|from|published\s+by)|according\s+to\s+(?:official\s+)?(?:sources?|reports?|guidelines?|documentation|the\s+company)|as\s+(?:reported|stated|noted|mentioned)\s+(?:by|in)\s+(?:the\s+)?(?:official|government|agency|institution)|public\s+(?:statement|announcement|notice|press\s+release)|annual\s+(?:report|review)|press\s+(?:release|statement)|official\s+website|government\s+(?:website|portal|publication))\b/gi,
+        amplifiers: /\b(click\s+(?:here|below)|verify\s+(?:your|account|details|identity|information)|confirm\s+(?:your|account|details|identity|information)|send\s+(?:your|the)\s+(?:details|information|credentials|documents?)|provide\s+(?:your|the)\s+(?:details|information|documentation)|submit\s+(?:your|the)\s+(?:form|details|information|documents?)|login\s+to\s+(?:verify|confirm|secure|update)|enter\s+(?:your\s+)?(?:password|credentials|details|information|code|pin)|do\s+not\s+(?:share|discuss|tell|ignore)|call\s+this\s+number|respond\s+to\s+this\s+(?:email|message|notice)\s+immediately)\b/gi,
+        description: 'Leverages perceived institutional or expert credibility to bypass critical evaluation of requests.'
+    },
+
+    SOCIAL_PROOF: {
+        label: 'Social Proof Manipulation',
+        weight: 0.65,
+        isAdvanced: false,
+        regex: /\b(everyone\s+(?:is|has|knows?|agrees?|loves?|uses?|says?)|join\s+(?:thousands|millions|hundreds\s+of\s+thousands|our\s+(?:growing\s+)?community|others\s+who|those\s+who)|trusted\s+by\s+(?:[0-9,]+|thousands|millions|hundreds\s+of)\s+(?:users?|people|investors?|customers?|families|clients?)|[0-9,]+\s+(?:users?|people|investors?|customers?|families|clients?)\s+(?:already|have|trust|use|love|rely)|don'?t\s+be\s+(?:left\s+(?:out|behind)|the\s+only\s+one\s+(?:not|who\s+hasn'?t))|industry\s+leaders\s+(?:are|have|use|trust)|most\s+(?:users?|people|investors?|professionals?|experts?|smart\s+people)\s+(?:have|are|prefer|choose|agree|use|know)|others\s+(?:are\s+already|have\s+already|joined|taken\s+advantage|switched|made\s+the\s+move)|be\s+part\s+of\s+(?:something|the\s+movement|a\s+growing|an\s+exclusive|the\s+(?:smart|winning)\s+(?:few|many))|see\s+why\s+(?:thousands|millions|everyone)\s+(?:are|have)|as\s+seen\s+on\s+(?:TV|CNN|BBC|Fox|NBC|ABC)|endorsed\s+by|celebrity\s+(?:backed|endorsed|recommended|approved)|people\s+(?:like\s+you\s+(?:are|have)|are\s+(?:already\s+)?saying)|(?:our|the)\s+community\s+of\s+(?:[0-9,]+|thousands|millions)|[0-9]+\s*[kKmM]\s+(?:users?|customers?|members?|followers?|reviews?|downloads?)\s+(?:can'?t\s+be\s+wrong|trust\s+us|agree)|rated\s+#?1\s+by|ranked\s+(?:first|#1|top)\s+(?:by|among|in))\b/gi,
+        neutralizer: /\b(according\s+to\s+(?:a\s+)?(?:survey|poll|study|research|report|meta-analysis)|(?:a\s+)?(?:survey|study|poll|meta-analysis)\s+(?:of|found\s+that|shows?\s+that|indicates?\s+that|found|conducted\s+by)|sample\s+(?:size|group|population)|respondents?|participants?\s+(?:reported|indicated|stated|agreed)|percentage\s+of\s+(?:respondents?|participants?)|statistically\s+(?:significant|relevant))\b/gi,
+        amplifiers: /\b((?:limited|exclusive)\s+(?:offer|access|invitation)|join\s+(?:now|today|immediately)|(?:before\s+it'?s?\s+(?:too\s+late|gone)|while\s+(?:you\s+can|spots?\s+last))|early\s+(?:access|bird)|sign\s+up\s+(?:now|today)|claim\s+your\s+(?:spot|place|access)|don'?t\s+(?:miss\s+out|be\s+left\s+behind))\b/gi,
+        description: 'Uses real or fabricated evidence of peer behavior to trigger conformity heuristics and bypass independent judgment.'
+    },
+
+    RECIPROCITY_BAITING: {
+        label: 'Reciprocity Baiting',
+        weight: 0.80,
+        isAdvanced: false,
+        regex: /\b((?:special|exclusive|personal|free|complimentary)\s+(?:gift|reward|prize|bonus|offer|deal|access|trial)\s+(?:for\s+you|waiting\s+for\s+you|reserved\s+for\s+you|just\s+for\s+you|exclusively\s+for\s+you|prepared\s+for\s+you)|as\s+a\s+(?:token\s+of\s+(?:our\s+)?appreciation|special\s+thank\s+you|valued\s+(?:customer|member|user)|return\s+for\s+your\s+loyalty)|we\s+(?:selected|chose|picked|handpicked|identified|chose)\s+you\s+(?:specifically|particularly|personally|exclusively|uniquely)?|since\s+you\s+(?:are|have\s+been)\s+(?:a\s+)?(?:valued|loyal|special|premium|trusted|important)\s+(?:customer|member|user|client|partner)|exclusive\s+(?:gift|reward|offer|access|invitation|deal)\s+(?:waiting|reserved|prepared|set\s+aside)\s+for\s+you|thank\s+you\s+for\s+your\s+(?:loyalty|continued\s+support|business|patronage|trust|commitment)|claim\s+your\s+(?:free|complimentary|exclusive)\s+(?:gift|reward|prize|access|offer|bonus)|you\s+(?:have\s+been\s+)?(?:selected|chosen|identified|picked|handpicked)\s+(?:to\s+receive|for\s+a\s+special|as\s+a\s+(?:recipient|winner|finalist))|we\s+(?:are\s+pleased|are\s+happy|wanted)\s+to\s+(?:offer|give|present|reward)\s+you|your\s+(?:loyalty|support|trust|continued\s+business)\s+(?:means|is)\s+(?:everything|so\s+much|the\s+world)\s+to\s+us|as\s+(?:our\s+(?:valued|loyal|special)\s+(?:customer|member)|a\s+(?:valued|loyal|special|trusted)\s+(?:customer|member|user)))\b/gi,
+        neutralizer: /\b(congratulations\s+on\s+your\s+(?:purchase|order|subscription|renewal|upgrade)|loyalty\s+(?:program|points?|rewards?)\s+(?:update|statement|balance|earned)|rewards?\s+(?:program|points?)\s+(?:terms|expiry|balance)|referral\s+(?:bonus|reward|program|credit)|affiliate\s+(?:commission|reward|program)|cashback\s+(?:earned|credited|processed|applied))\b/gi,
+        amplifiers: /\b(click\s+(?:here|below|to\s+claim)|claim\s+(?:now|today|immediately|before\s+(?:it\s+expires?|the\s+deadline))|don'?t\s+(?:miss|let\s+it\s+(?:expire|go|lapse))|offer\s+expires?|limited\s+to\s+(?:first|next)\s+[0-9]+|act\s+(?:before|by)|respond\s+(?:by|before))\b/gi,
+        description: 'Establishes a prior exchange — real or implied — to create a false sense of obligation that pressures compliance.'
+    },
+
+    COMMITMENT_TRAPPING: {
+        label: 'Commitment Trapping',
+        weight: 0.85,
+        isAdvanced: false,
+        regex: /\b(as\s+(?:you\s+(?:agreed|requested|indicated|confirmed|mentioned|stated|acknowledged)|(?:per\s+)?(?:our\s+)?(?:previous|prior|earlier)\s+(?:conversation|discussion|agreement|communication|exchange|interaction))|(?:following|based\s+on|per|in\s+line\s+with)\s+your\s+(?:request|indication|confirmation|agreement|interest|application|registration)|since\s+you\s+(?:(?:already\s+)?said\s+yes|(?:have\s+)?(?:agreed|confirmed|opted\s+in|signed\s+up|registered|enrolled)|expressed\s+interest|applied\s+for|requested)|(?:to\s+)?(?:complete|finalize|confirm|process)\s+(?:your|the)\s+(?:registration|enrollment|order|application|request|subscription|account\s+setup|purchase)|(?:verify|confirm|validate|authenticate)\s+your\s+(?:account|identity|details|email|phone|payment)\s+(?:to\s+(?:avoid|prevent)|or\s+(?:your\s+account|access\s+will)|to\s+maintain|to\s+keep)|(?:action|response)\s+required\s+(?:immediately|now|urgently|within\s+[0-9]+\s+(?:hours?|days?)|by\s+[a-z0-9])|(?:permanent(?:ly)?|irreversible(?:ly)?)\s+(?:deleted?|removed?|suspended?|restricted?|lost?|terminated?|revoked?|deactivated?|closed?)|(?:cannot|can'?t|won'?t\s+be\s+able\s+to)\s+be\s+(?:undone|reversed?|recovered?|restored?|retrieved?)|your\s+(?:account|access|data|subscription|service)\s+will\s+(?:be\s+)?(?:permanently|irreversibly)\s+(?:deleted?|terminated?|suspended?|lost?|removed?|closed?|cancelled?)|you\s+(?:already\s+(?:agreed|consented|signed\s+up)|have\s+(?:given\s+(?:us\s+)?your\s+(?:consent|permission|approval)|agreed\s+to\s+the)))\b/gi,
+        neutralizer: /\b((?:account|subscription)\s+(?:renewal|expiration)\s+(?:notice|reminder)|(?:this\s+is\s+(?:a\s+)?)?(?:routine|standard|regular|automated)\s+(?:verification|check|reminder|notification|message)|you\s+(?:can\s+(?:always\s+)?(?:cancel|opt\s+out|unsubscribe|change\s+your\s+mind|withdraw)|may\s+(?:cancel|opt\s+out|unsubscribe|withdraw\s+consent))\s+at\s+any\s+time|no\s+(?:obligation|commitment|strings\s+attached|further\s+action\s+required)|you\s+are\s+not\s+(?:required|obligated|committed)\s+to)\b/gi,
+        amplifiers: /\b(click\s+(?:here|below|this\s+link)|follow\s+the\s+link|do\s+not\s+(?:ignore|delete|discard|dismiss)\s+this|immediately|right\s+(?:now|away)|without\s+(?:delay|hesitation)|or\s+(?:risk|lose|face|your\s+account))\b/gi,
+        description: 'References a previous action or agreement to constrain current choices through consistency and commitment pressure.'
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // ADVANCED PATTERNS — higher severity, trigger aggressive scoring boosts
+    // ─────────────────────────────────────────────────────────────────────────
+
+    SEXTORTION: {
+        label: 'Sextortion / Sexual Coercion',
+        weight: 0.98,
+        isAdvanced: true,
+        regex: /\b(i\s+have\s+(?:access\s+to\s+|obtained\s+|recorded\s+|captured\s+)?(?:your\s+)?(?:private\s+)?(?:photos?|videos?|images?|recordings?|footage|webcam\s+footage|screen\s+recordings?)|i\s+(?:recorded|filmed|captured|have\s+footage\s+of|have\s+video\s+of)\s+you|your\s+(?:intimate|private|explicit|sexual|naked|nude)\s+(?:photos?|videos?|images?|footage|content|material)|(?:explicit|intimate|compromising|sexual|nude|naked)\s+(?:content|material|images?|videos?|photos?|footage)\s+(?:of\s+you|you\s+sent|you\s+shared|i\s+have)|unless\s+you\s+(?:pay|send|transfer|provide)|(?:pay|send|wire|transfer)\s+(?:[a-z]*coin|\$[0-9]+|bitcoin|ethereum|crypto|money|funds?)\s+(?:or|otherwise|to\s+avoid)|i\s+will\s+(?:send|share|post|distribute|expose|publish|release|leak)\s+(?:this|these|the)\s+(?:to|on)\s+(?:your|everyone|all\s+your|your\s+contacts?|your\s+family|your\s+friends?|social\s+media|the\s+internet)|send\s+(?:it|them|the\s+video|the\s+photos?)\s+to\s+(?:your|everyone\s+you|all\s+your|your\s+family|your\s+employer)|i\s+installed\s+(?:malware|spyware|a\s+keylogger|a\s+trojan|software)\s+(?:on\s+your|in\s+your)|i\s+have\s+(?:full\s+)?control\s+(?:over|of)\s+your\s+(?:device|camera|webcam|phone|computer|screen)|your\s+(?:browsing\s+history|search\s+history|activity|online\s+activity)\s+(?:has\s+been\s+recorded|is\s+being\s+monitored|is\s+in\s+my\s+possession)|do\s+not\s+(?:contact\s+authorities?|go\s+to\s+the\s+police|report\s+this|tell\s+anyone)|pay\s+within\s+(?:[0-9]+)\s+(?:hours?|days?)|you\s+were\s+(?:visiting|watching|browsing)\s+(?:adult|pornographic|explicit|inappropriate)\s+(?:(?:websites?|sites?|content|material))\s+and\s+i)\b/gi,
+        neutralizer: /\b(cybersecurity\s+(?:awareness|training|education|tip|advice)|this\s+is\s+a\s+(?:common|known|reported)\s+scam|how\s+to\s+(?:recognize|spot|avoid|report)\s+sextortion|do\s+not\s+pay|report\s+to\s+(?:authorities?|police|fbi|law\s+enforcement)|victim\s+(?:support|resources?|helpline)|national\s+center|internet\s+crime\s+complaint)\b/gi,
+        amplifiers: /\b(bitcoin\s+wallet|crypto\s+(?:payment|address|wallet)|send\s+(?:the\s+)?(?:payment|money|funds?|bitcoin|btc|ethereum)|do\s+not\s+(?:ignore|delete)\s+this|you\s+have\s+(?:[0-9]+)\s+(?:hours?|days?)\s+to\s+(?:pay|respond)|time\s+is\s+(?:running\s+out|limited)|i\s+am\s+watching|i\s+know\s+(?:where\s+you\s+live|your\s+address|your\s+location|who\s+you\s+are))\b/gi,
+        description: 'Threatens to expose real or fabricated intimate content unless financial or other compliance demands are met.'
+    },
+
+    EMOTIONAL_DEPENDENCY: {
+        label: 'Emotional Dependency Exploitation',
+        weight: 0.88,
+        isAdvanced: true,
+        regex: /\b(you\s+(?:are\s+the\s+only(?:\s+one)?|mean\s+everything|are\s+everything)\s+(?:to\s+me|that\s+matters|in\s+my\s+life|who\s+understands?\s+me|i\s+have)|(?:no\s+one\s+else|nobody\s+else)\s+(?:cares?\s+about\s+me|understands?\s+me|is\s+there\s+for\s+me|will\s+help\s+me|gets\s+me)|if\s+you\s+(?:leave|go|don'?t\s+(?:help|stay|come\s+back))\s+(?:i\s+(?:will|might|may|could)\s+(?:hurt\s+myself|end\s+(?:it|my\s+life|everything)|not\s+be\s+here|be\s+lost|fall\s+apart|have\s+nothing\s+left|do\s+something\s+drastic))|i\s+(?:can'?t\s+live|couldn'?t\s+survive|can'?t\s+(?:go\s+on|function|cope|handle\s+this))\s+without\s+you|after\s+everything\s+(?:i'?ve?\s+done\s+for\s+you|we'?ve?\s+been\s+through\s+together)|you'?re?\s+(?:abandoning|leaving|rejecting|hurting\s+me|turning\s+your\s+back\s+on)\s+me|(?:my\s+wellbeing|my\s+happiness|my\s+mental\s+health|my\s+life|my\s+survival|i)\s+(?:depends?\s+on\s+you|needs?\s+you)|you\s+(?:owe\s+me|promised\s+me|made\s+me\s+(?:a\s+promise|believe|feel\s+like))|how\s+could\s+you\s+(?:do\s+this\s+to\s+me|leave\s+me\s+now|hurt\s+me\s+like\s+this|treat\s+me\s+this\s+way)|i\s+(?:thought|believed)\s+(?:we\s+had\s+something|you\s+cared|you\s+loved\s+me|you\s+were\s+different)\s+and\s+now|without\s+you\s+i\s+(?:have\s+nothing|am\s+nothing|don'?t\s+know\s+what\s+i'?d?\s+do|would\s+fall\s+apart))\b/gi,
+        neutralizer: /\b(therapy|counseling|mental\s+health\s+(?:support|resources?)|healthy\s+(?:relationships?|boundaries?)|emotional\s+(?:abuse|manipulation)\s+(?:awareness|signs?|patterns?)|this\s+(?:behavior|pattern|dynamic)\s+(?:is|represents?)\s+(?:a\s+sign\s+of|an\s+example\s+of)|in\s+(?:abusive|toxic)\s+relationships?)\b/gi,
+        amplifiers: /\b(please\s+don'?t\s+(?:leave|go|abandon|do\s+this)|i\s+(?:need|beg)\s+you|you'?re?\s+(?:my\s+(?:only\s+)?(?:hope|reason|purpose|reason\s+to\s+live))|i\s+(?:love|trust|need)\s+only\s+you|if\s+you\s+(?:really\s+)?(?:loved|cared\s+about|valued)\s+me|prove\s+(?:to\s+me\s+)?(?:that\s+you\s+care|your\s+love|you\s+care))\b/gi,
+        description: 'Exploits emotional attachment to manufacture dependency, creating psychological leverage to extract compliance.'
+    },
+
+    GUILT_SYMPATHY_PRESSURE: {
+        label: 'Guilt, Sympathy & Moral Pressure',
+        weight: 0.82,
+        isAdvanced: true,
+        regex: /\b((?:after\s+all\s+)?(?:i'?ve?\s+done\s+for\s+you|we\s+have\s+done\s+for\s+you)|(?:i|we)\s+(?:sacrificed|gave\s+up|went\s+through|suffered|struggled)\s+(?:so\s+much|everything)\s+for\s+you|you\s+(?:don'?t\s+(?:care|appreciate|value)|never\s+(?:cared|appreciated|valued)|are\s+so\s+ungrateful|owe\s+me\s+(?:this|that|at\s+least))|how\s+(?:could\s+you|dare\s+you)\s+(?:say|do|think|treat\s+me)\s+that|i\s+(?:am\s+(?:sick|dying|struggling|suffering|in\s+debt|desperate|homeless|starving|in\s+danger))|(?:my\s+(?:children|family|mother|father|kids?|daughter|son)|the\s+(?:children|victims?|people|family))\s+(?:are\s+(?:starving|suffering|dying|sick|homeless|in\s+danger)|will\s+(?:suffer|go\s+hungry|lose\s+everything|die|be\s+affected)|depend\s+on\s+(?:you|this|your\s+help))|(?:just|only)\s+this\s+(?:once|time|one\s+thing)|(?:you\s+(?:are\s+the\s+only|only\s+you))\s+(?:can\s+help|who\s+can\s+save|who\s+cares?)|i\s+(?:came\s+to\s+you\s+because|trust\s+only\s+you\s+with\s+this|have\s+nowhere\s+else\s+to\s+turn)|(?:god|karma|the\s+universe|heaven)\s+will\s+(?:reward|bless|repay|judge)\s+you|(?:do\s+(?:the\s+right\s+thing|what'?s?\s+right|your\s+duty|what\s+(?:god|heaven)\s+would\s+want)|it'?s?\s+(?:your\s+moral\s+obligation|the\s+right\s+thing\s+to\s+do|what\s+a\s+good\s+person\s+would\s+do))|helping\s+me\s+(?:is\s+the\s+right\s+thing|would\s+mean\s+(?:everything|the\s+world))\s+to\s+(?:me|us)|(?:have\s+a\s+(?:heart|conscience|soul)|find\s+it\s+in\s+your\s+heart|be\s+the\s+bigger\s+person)|if\s+you\s+were\s+a\s+(?:good|decent|true|real)\s+(?:person|friend|christian|human\s+being|man|woman))\b/gi,
+        neutralizer: /\b(manipulation\s+tactic|guilt\s+tripping|emotional\s+(?:blackmail|manipulation)|as\s+an\s+example\s+of|this\s+is\s+(?:how|an\s+example\s+of)\s+(?:guilt|emotional\s+manipulation)|recognizing\s+guilt\s+trips)\b/gi,
+        amplifiers: /\b(please\s+(?:help\s+me|i\s+beg\s+you|i\s+need\s+you)|i\s+have\s+no\s+(?:one\s+else|other\s+option|choice|hope)|you'?re?\s+my\s+last\s+(?:hope|option|resort|chance)|i\s+(?:am\s+begging|beg)\s+you|(?:please|i\s+need\s+your)\s+help\s+(?:now|urgently|immediately))\b/gi,
+        description: 'Applies moral pressure, manufactured sympathy, or guilt to compel compliance by exploiting empathy and duty.'
+    },
+
+    GASLIGHTING: {
+        label: 'Gaslighting & Reality Distortion',
+        weight: 0.87,
+        isAdvanced: true,
+        regex: /\b(you'?re?\s+(?:imagining|overreacting|being\s+(?:paranoid|ridiculous|crazy|irrational|too\s+sensitive|hysterical|dramatic|unreasonable|difficult)|(?:too\s+)?(?:emotional|sensitive)|making\s+(?:things\s+up|it\s+up|a\s+big\s+deal|a\s+mountain\s+out\s+of))|that\s+(?:never\s+happened|didn'?t\s+happen|is\s+not\s+what\s+(?:happened|was\s+said|i\s+meant))|i\s+never\s+(?:said\s+that|did\s+that|did\s+anything)\s+(?:wrong|like\s+that)?|you\s+(?:always|never)\s+(?:exaggerate|misunderstand|twist\s+my\s+words|take\s+things\s+out\s+of\s+context|forget|misremember|lie\s+about)|no\s+one\s+(?:else\s+)?(?:would\s+believe\s+you|believes?\s+you|will\s+take\s+your\s+side|would\s+agree\s+with\s+you)|everyone\s+(?:agrees\s+with\s+me|thinks\s+you'?re?\s+(?:wrong|overreacting|crazy|the\s+problem))|you\s+(?:can'?t\s+trust\s+your\s+(?:memory|instincts?|feelings?|judgment)|are\s+(?:too\s+emotional\s+to\s+think\s+clearly|misremembering|wrong\s+about\s+this|confused))|(?:your\s+)?(?:perception|memory|recollection|version\s+of\s+events?)\s+(?:is|are)\s+(?:wrong|off|distorted|unreliable|incorrect)|(?:i\s+am\s+the\s+only\s+one|you\s+need\s+me)\s+(?:who\s+(?:really\s+knows|understands|cares\s+about)\s+you|to\s+(?:protect|guide|help|tell\s+you\s+the\s+truth)|who\s+tells\s+you\s+the\s+truth)|(?:stop\s+being\s+so|don'?t\s+be\s+(?:so\s+)?)\s*(?:sensitive|dramatic|paranoid|crazy|emotional|ridiculous)|you\s+(?:knew\s+what\s+this\s+was|agreed\s+to\s+this|consented\s+to\s+this|wanted\s+this)\s+when|that'?s?\s+not\s+what\s+(?:happened|was\s+said|(?:i|we)\s+(?:said|meant|agreed))|you\s+are\s+(?:confused|mistaken|wrong\s+about\s+this|misinterpreting\s+everything|paranoid)|i'?m?\s+(?:not|never)\s+(?:doing|saying|trying)\s+(?:anything\s+(?:wrong|bad|inappropriate)|what\s+you\s+think))\b/gi,
+        neutralizer: /\b(gaslighting\s+(?:is|as\s+a|behavior|pattern|tactic)|signs\s+of\s+gaslighting|example\s+of\s+gaslighting|how\s+to\s+(?:recognize|identify|spot)\s+gaslighting|in\s+(?:abusive|toxic)\s+(?:relationships?|dynamics?))\b/gi,
+        amplifiers: /\b(you\s+need\s+(?:help|therapy|to\s+see\s+someone)|nobody\s+(?:else\s+)?agrees\s+with\s+you|everyone\s+(?:thinks|says\s+)?(?:i'?m?|i\s+am)\s+right|i\s+(?:know|understand)\s+(?:better|best)|trust\s+me\s+(?:not\s+(?:them|him|her|yourself))|stop\s+(?:talking\s+to|listening\s+to)\s+(?:them|others?|your\s+friends?))\b/gi,
+        description: "Systematically undermines the target's perception of reality, memory, and judgment to manufacture self-doubt and control."
+    },
+
+    TRUST_GROOMING: {
+        label: 'Long-term Trust Grooming',
+        weight: 0.85,
+        isAdvanced: true,
+        regex: /\b((?:i\s+(?:have\s+been|was)\s+(?:watching|following|researching|studying|thinking\s+about)\s+you\s+for|i'?ve?\s+(?:researched|studied|looked\s+into|been\s+thinking\s+about)\s+you\s+for)\s+(?:[0-9]+\s+)?(?:weeks?|months?|a\s+while|some\s+time|a\s+long\s+time)|i\s+(?:chose|selected|picked|handpicked)\s+you\s+(?:specifically|particularly|personally|among\s+(?:many|thousands|hundreds|all))|i\s+feel\s+(?:like\s+we\s+(?:have\s+)?(?:a\s+)?(?:real\s+)?connection|we\s+(?:have\s+met|know\s+each\s+other)\s+before|as\s+if\s+i\s+know\s+you)|you\s+(?:can\s+(?:always\s+)?trust\s+me\s+completely|are\s+safe\s+with\s+me|can\s+tell\s+me\s+anything|don'?t\s+need\s+anyone\s+else)|everything\s+i'?ve?\s+told\s+you\s+(?:has\s+been|is)\s+(?:true|honest)|(?:our\s+(?:relationship|connection|bond)|the\s+trust\s+(?:between\s+us|we\s+have\s+built))\s+(?:is\s+(?:special|unique|real|rare|genuine)|means\s+(?:everything|so\s+much)\s+to\s+me)|i\s+would\s+never\s+(?:lie\s+to|deceive|hurt|betray)\s+you|(?:don'?t\s+(?:tell|mention|share))\s+(?:anyone|others?|your\s+(?:family|friends?|partner|parents?))\s+about\s+(?:this|us\s+(?:talking|communicating|meeting|chatting))|this\s+(?:is\s+between\s+us|stays\s+between\s+(?:you\s+and\s+me|us))|our\s+(?:little\s+secret|secret|special\s+connection|unique\s+bond)|i\s+(?:understand|know)\s+you\s+(?:better\s+than\s+(?:anyone|they\s+do|you\s+think)|like\s+no\s+one\s+else))\b/gi,
+        neutralizer: /\b(grooming\s+(?:behavior|pattern|tactic|warning\s+sign)|online\s+safety|protect\s+(?:yourself|children)\s+(?:from|online)|how\s+(?:predators?|groomers?|scammers?)\s+(?:operate|work|target)|warning\s+signs?\s+of\s+grooming|this\s+is\s+an\s+example)\b/gi,
+        amplifiers: /\b(keep\s+this\s+(?:between\s+us|secret|private|to\s+yourself)|don'?t\s+(?:tell\s+anyone|mention\s+this|share\s+this)|no\s+one\s+(?:else\s+)?(?:needs\s+to\s+know|would\s+understand\s+us)|just\s+(?:between\s+(?:you\s+and\s+me|us))|this\s+is\s+(?:our|just\s+our)\s+(?:little\s+)?secret|i\s+(?:chose|selected|trust)\s+only\s+you)\b/gi,
+        description: 'Systematically builds false intimacy and trust over time before exploiting that relationship for personal gain or control.'
+    },
+
+    COGNITIVE_OVERLOAD: {
+        label: 'Cognitive Overload & Confusion',
+        weight: 0.78,
+        isAdvanced: true,
+        regex: /\b((?:as\s+per\s+(?:regulation|clause|section|article|subsection|paragraph|directive|statute|rule|provision|policy|protocol)\s+[0-9A-Z.\-]+)|(?:refer\s+to\s+(?:appendix|annex|schedule|exhibit|section|clause|paragraph)\s+[A-Z0-9.\-]+)|(?:pursuant\s+to|in\s+accordance\s+with|under\s+(?:the\s+provisions?\s+of|article))\s+(?:regulation|directive|statute|law|act|rule|policy|protocol)\s+[0-9A-Z.\-]+|(?:[0-9A-Z.\-]+\s+)?(?:compliance|regulatory|legislative|statutory)\s+(?:framework|directive|mandate|requirement|protocol|obligation)|(?:multi-factor|two-factor|out-of-band|dual-channel|cross-platform|end-to-end)\s+(?:authentication|verification|validation|authorization)\s+(?:protocol|process|procedure|is\s+required)|(?:blockchain|distributed\s+ledger|smart\s+contract|tokenized|decentralized)\s+(?:verification|confirmation|protocol|process|authentication)|failure\s+to\s+complete\s+(?:the\s+)?(?:multi-step|two-step|three-step|phased|layered)\s+(?:verification|process|protocol|authentication)|(?:first|then|next|after\s+that|subsequently|finally|upon\s+completion)\s+(?:you\s+(?:must|need\s+to|should|are\s+required\s+to)|please)\s+(?:verify|confirm|submit|provide|send|click|download|install|access))\b/gi,
+        neutralizer: /\b(tutorial|step-by-step\s+guide|instructions?\s+for|how\s+to\s+(?:complete|set\s+up|configure|use)|documentation|help\s+(?:center|article|guide)|frequently\s+asked|support\s+(?:guide|article|center))\b/gi,
+        amplifiers: /\b(you\s+must\s+(?:complete|follow)\s+(?:all|each|every)\s+step|do\s+not\s+skip|failure\s+to\s+(?:complete|follow)\s+will|time\s+-sensitive\s+process|must\s+be\s+done\s+(?:now|immediately|within))\b/gi,
+        description: 'Overwhelms the target with complex language, multi-step processes, or contradictory information to bypass critical thinking.'
+    },
+
+    SOCIAL_OBLIGATION: {
+        label: 'Social Obligation & Peer Pressure',
+        weight: 0.80,
+        isAdvanced: true,
+        regex: /\b((?:everyone\s+(?:in\s+(?:your\s+(?:team|department|company|organisation|family|group)|(?:the|our)\s+(?:team|group|community)))\s+(?:has\s+(?:already|done\s+this)|agreed|signed\s+(?:up|off)|participated|completed\s+this))|(?:your\s+(?:colleagues?|peers?|friends?|teammates?|coworkers?|classmates?))\s+(?:have\s+already|all|(?:have\s+)?(?:agreed|signed|completed|done\s+this)|are\s+(?:all\s+)?waiting\s+for\s+you)|(?:you\s+(?:are\s+the\s+only\s+one|are\s+holding\s+(?:everyone|us|the\s+team)|are\s+(?:letting|leaving))\s+(?:down|everyone\s+waiting|the\s+team\s+(?:down|behind))|(?:don'?t\s+(?:let|be\s+the\s+reason))\s+(?:the\s+team|everyone|others?)\s+(?:down|suffer|fail))|(?:we\s+are\s+counting|(?:the\s+)?(?:team|group|everyone)\s+is\s+counting)\s+on\s+you|(?:your\s+participation|your\s+response|your\s+(?:vote|input|agreement))\s+(?:is\s+(?:needed|required|critical|expected)|is\s+holding\s+(?:things|everything)\s+up)|(?:if\s+you\s+(?:don'?t|fail\s+to|refuse\s+to))\s+(?:participate|respond|contribute|agree|comply)\s+(?:everyone\s+else\s+will\s+(?:suffer|be\s+affected|be\s+impacted)|it\s+will\s+affect\s+(?:everyone|the\s+(?:whole\s+)?(?:team|group))))\b/gi,
+        neutralizer: /\b(optional|voluntary|no\s+obligation|your\s+choice|at\s+your\s+(?:own\s+)?discretion|no\s+pressure|when\s+you\s+have\s+time|feel\s+free\s+to|you\s+are\s+welcome\s+to)\b/gi,
+        amplifiers: /\b(everyone\s+is\s+waiting|we\s+(?:need|require)\s+your\s+(?:immediate\s+)?(?:response|confirmation|participation)|please\s+(?:respond|confirm|complete)\s+(?:immediately|now|as\s+soon\s+as\s+possible|urgently)|all\s+(?:team\s+members?|participants?|employees?)\s+(?:must|are\s+required\s+to)|this\s+is\s+(?:mandatory|compulsory|required\s+for\s+all))\b/gi,
+        description: 'Exploits social conformity, group identity, and peer expectations to coerce compliance by manufacturing collective pressure.'
+    },
+
+    IDENTITY_PERSONALIZATION: {
+        label: 'Identity-Based Personalization Attack',
+        weight: 0.83,
+        isAdvanced: true,
+        regex: /\b((?:i\s+(?:know|can\s+see|noticed|observed|found)\s+(?:that\s+you\s+(?:work\s+(?:at|for)|live\s+(?:in|at|near)|attend|study\s+at|are\s+(?:a\s+)?(?:interested\s+in|passionate\s+about|a\s+fan\s+of|involved\s+in))))|(?:based\s+on\s+your\s+(?:profile|linkedin|social\s+media|online\s+presence|recent\s+activity|purchase\s+history|browsing\s+(?:history|behavior)))|(?:i\s+(?:saw|noticed|read)\s+your\s+(?:post|comment|tweet|profile|article|review|listing))|(?:as\s+(?:a|an)\s+(?:[a-z]+\s+)?(?:professional|expert|enthusiast|fan|user|member|employee|student|parent|homeowner|investor)\s+(?:like\s+you|in\s+your\s+position|at\s+your\s+level))|(?:because\s+you\s+(?:(?:recently|previously)\s+)?(?:searched\s+for|viewed|purchased|downloaded|visited|signed\s+up\s+for|expressed\s+interest\s+in))|(?:tailored\s+(?:specifically|exclusively|personally)\s+for\s+(?:you|people\s+like\s+you)|designed\s+with\s+(?:you\s+in\s+mind|your\s+(?:needs?|interests?|goals?)\s+in\s+mind))|(?:we\s+(?:noticed|identified|detected)\s+that\s+you\s+(?:may\s+be\s+(?:interested\s+in|looking\s+for|struggling\s+with|facing)|could\s+benefit\s+from))|(?:this\s+(?:message|offer|opportunity|invitation)\s+is\s+(?:being\s+sent\s+)?exclusively\s+to\s+(?:select|a\s+select\s+group\s+of|qualified)\s+(?:individuals?|professionals?|people)))\b/gi,
+        neutralizer: /\b((?:based\s+on\s+your\s+)?(?:account\s+(?:preferences?|settings?)|subscription\s+(?:plan|type)|purchase\s+history)|(?:we\s+(?:use\s+cookies|personalize)|your\s+privacy\s+settings?)|opt\s+(?:in|out)\s+of\s+(?:marketing|personalization)|privacy\s+policy|data\s+(?:protection|privacy)\s+(?:notice|policy))\b/gi,
+        amplifiers: /\b(this\s+is\s+just\s+for\s+you|only\s+(?:you|select\s+individuals?)\s+(?:have\s+(?:been\s+)?(?:invited|selected|chosen)|(?:can|are\s+able\s+to)\s+(?:access|qualify))|i\s+am\s+reaching\s+out\s+personally|this\s+offer\s+is\s+not\s+available\s+to\s+(?:the\s+general\s+public|everyone|others?)|your\s+name\s+(?:came\s+up|was\s+mentioned|was\s+recommended|appeared)\s+(?:in|during))\b/gi,
+        description: "Uses personal details, behavioral data, or identity markers to create a false sense of targeting legitimacy that lowers the victim's guard."
     }
 };
+
+/**
+ * Set of advanced pattern keys — used by the scoring system
+ * to apply significant bonuses when these trigger.
+ */
+export const ADVANCED_PATTERN_KEYS = new Set(
+    Object.entries(MANIPULATION_PATTERNS)
+        .filter(([, p]) => p.isAdvanced)
+        .map(([k]) => k)
+);
+
+/**
+ * Benign topic signals — presence of these in the text globally reduces
+ * the overall manipulation score for ALL patterns (topic-level neutralizer).
+ */
+export const GLOBAL_BENIGN_SIGNALS = /\b(this\s+(?:article|guide|tutorial|lesson|example|report|case\s+study|scenario)|for\s+(?:educational|academic|awareness|training|research|illustrative)\s+purposes?|the\s+following\s+(?:is\s+an?\s+)?example|hypothetical\s+scenario|(?:in\s+this\s+)?(?:example|scenario|case)|as\s+(?:illustrated|described|shown)\s+(?:above|below|here)|academic\s+(?:paper|research|study|publication|journal)|(?:news|journalist|reporter|media)\s+(?:report|article|coverage|investigation)|(?:warning\s+signs?|red\s+flags?)\s+(?:include|to\s+(?:look\s+for|watch\s+for|spot|recognize|identify|avoid))|how\s+to\s+(?:identify|recognize|spot|detect|avoid)\s+(?:phishing|scams?|fraud|manipulation|social\s+engineering)|common\s+(?:phishing|scam|fraud|manipulation)\s+(?:tactics?|techniques?|patterns?)|(?:phishing|scam|fraud)\s+awareness|protect\s+yourself\s+(?:from|against)\s+(?:phishing|scams?|fraud)|be\s+(?:wary|careful|cautious|skeptical)\s+of)\b/gi;

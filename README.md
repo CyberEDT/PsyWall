@@ -1,5 +1,5 @@
-🧠 PsyWall
-AI-Driven Psychological Scam & Threat Detection Engine
+# 🧠 PsyWall (MIDS)
+A Cognitive Firewall for Human-Centric Security
 
 PsyWall is an advanced cybersecurity intelligence system designed to detect psychological manipulation techniques used in scams, phishing, and social engineering attacks.
 
@@ -205,7 +205,7 @@ CyberEDT aims to build a modular cybersecurity platform with real-world defensiv
 This project is released for educational and research purposes.
 Use responsibly and ethically.
 
-👨‍💻 Author
+## 👨‍💻 Author
 
 Nitesh Yadav
 Cybersecurity | Cloud Security | Security Research

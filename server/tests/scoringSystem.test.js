@@ -18,7 +18,7 @@ describe('Scoring System Transparency', () => {
         expect(result.breakdown).toHaveProperty('emotionalIntensity');
         expect(result.breakdown).toHaveProperty('confidenceAggregation');
         expect(result.breakdown).toHaveProperty('densityFactor');
-        expect(result.formula).toContain('Risk');
+        expect(result.formula).toContain('MRS');
     });
 
     it('should return zero score for empty detections', () => {

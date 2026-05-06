@@ -7,6 +7,7 @@ import PrivacyPolicy from './components/PrivacyPolicy'
 import ToolInfo from './components/ToolInfo'
 import Documentation from './components/Documentation'
 import './App.css'
+import logoImage from './assets/logo/logo.png'
 
 function App() {
   const [inputText, setInputText] = useState('')
@@ -22,7 +23,7 @@ function App() {
       terms: 'Terms of Use',
       privacy: 'Privacy Policy'
     }
-    document.title = `PsyWall | ${titles[currentView] || 'Cognitive Security'}`
+    document.title = `PsyWall (MIDS) | ${titles[currentView] | 'Cognitive Security'}`
   }, [currentView])
 
   const handleAnalyze = async () => {
@@ -79,10 +80,10 @@ function App() {
       <nav className="relative z-10 w-full border-b border-slate-800/50 bg-[#0a0a0b]/80 backdrop-blur-md pointer-events-auto">
         <div className="max-w-[1200px] mx-auto px-6 h-16 flex justify-between items-center">
           <div
-            className="text-white font-black text-xl cursor-pointer hover:text-blue-400 transition-colors"
+            className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => setCurrentView('main')}
           >
-            PsyWall
+            <img src={logoImage} alt="PsyWall Logo" className="h-8 w-auto object-contain" />
           </div>
           <div className="flex gap-8 text-[13px] font-medium tracking-wide items-center">
             <button
@@ -119,13 +120,9 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             className="pointer-events-auto flex flex-col items-center gap-2"
           >
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/10 rounded-xl border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                <Shield className="text-blue-400" size={32} />
-              </div>
-              <h1 className="text-4xl font-black tracking-tighter text-white">
-                PSY<span className="text-blue-500">WALL</span>
-              </h1>
+            <div className="flex flex-col items-center gap-4">
+              <img src={logoImage} alt="PsyWall Logo" className="h-20 w-auto object-contain drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]" />
+              <h1 className="sr-only">PsyWall</h1>
             </div>
             <p className="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em]">Cognitive Intrusion Detection</p>
           </motion.div>
@@ -233,27 +230,61 @@ function App() {
                   </div>
                 </div>
 
+                {/* Benign Context Notice */}
+                {result.contextAnalysis?.isLikelyBenignContext && (
+                  <div className="flex items-start gap-3 bg-blue-500/5 border border-blue-500/20 p-4 rounded-2xl">
+                    <Info size={14} className="text-blue-400 shrink-0 mt-0.5" />
+                    <p className="text-[11px] text-blue-300/80 font-medium leading-relaxed">
+                      <span className="font-black uppercase tracking-wider">Context Detected: </span>
+                      {result.contextAnalysis.benignContextDescription}
+                    </p>
+                  </div>
+                )}
+
+                {/* Sextortion Emergency Banner */}
+                {result.alertPayload?.hasSextortion && (
+                  <div className="flex items-start gap-4 bg-red-500/10 border-2 border-red-500/40 p-5 rounded-2xl shadow-[0_0_30px_rgba(239,68,68,0.15)]">
+                    <AlertTriangle size={20} className="text-red-400 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-black text-red-400 uppercase tracking-widest mb-1">Sextortion Threat — Do Not Comply</p>
+                      <p className="text-[11px] text-red-300/80 font-medium leading-relaxed">Do NOT pay, send files, or respond to demands. Report immediately to your national cybercrime authority. The attacker is almost certainly bluffing.</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Compound Attack Banner */}
+                {result.alertPayload?.isCompoundAttack && !result.alertPayload?.hasSextortion && (
+                  <div className="flex items-start gap-3 bg-orange-500/5 border border-orange-500/30 p-4 rounded-2xl">
+                    <Zap size={14} className="text-orange-400 shrink-0 mt-0.5" />
+                    <p className="text-[11px] text-orange-300/80 font-medium leading-relaxed">
+                      <span className="font-black uppercase tracking-wider text-orange-400">Compound Attack Detected: </span>
+                      Multiple manipulation tactics are active simultaneously. Combinations are significantly more dangerous than any single tactic — this pattern is consistent with a coordinated psychological attack.
+                    </p>
+                  </div>
+                )}
+
                 {/* Primary Alert */}
-                <div className={`relative overflow-hidden p-8 rounded-3xl border transition-all ${result.alertPayload.score > 40
+                <div className={`relative overflow-hidden p-8 rounded-3xl border transition-all ${result.alertPayload.score > 55
                   ? 'bg-red-500/5 border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]'
-                  : result.alertPayload.score > 10
-                    ? 'bg-yellow-500/5 border-yellow-500/20'
-                    : 'bg-emerald-500/5 border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.1)]'
+                  : result.alertPayload.score > 35
+                    ? 'bg-orange-500/5 border-orange-500/20'
+                    : result.alertPayload.score > 15
+                      ? 'bg-yellow-500/5 border-yellow-500/20'
+                      : 'bg-emerald-500/5 border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.1)]'
                   }`}>
-                  <div className={`absolute top-0 right-0 p-3 font-black text-[80px] opacity-5 select-none ${result.alertPayload.score > 40 ? 'text-red-500' : 'text-slate-500'
+                  <div className={`absolute top-0 right-0 p-3 font-black text-[80px] opacity-5 select-none ${result.alertPayload.score > 55 ? 'text-red-500' : result.alertPayload.score > 35 ? 'text-orange-500' : 'text-slate-500'
                     }`}>
                     {result.alertPayload.score}
                   </div>
 
                   <div className="relative z-10">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className={`p-2 rounded-lg ${result.alertPayload.score > 40 ? 'bg-red-500/20 text-red-400' :
-                        result.alertPayload.score > 10 ? 'bg-yellow-500/20 text-yellow-400' :
+                      <div className={`p-2 rounded-lg ${result.alertPayload.score > 55 ? 'bg-red-500/20 text-red-400' :
+                        result.alertPayload.score > 35 ? 'bg-orange-500/20 text-orange-400' :
+                        result.alertPayload.score > 15 ? 'bg-yellow-500/20 text-yellow-400' :
                           'bg-emerald-500/20 text-emerald-400'
                         }`}>
-                        {result.alertPayload.score > 40 ? (
-                          <AlertTriangle size={24} />
-                        ) : result.alertPayload.score > 10 ? (
+                        {result.alertPayload.score > 35 ? (
                           <AlertTriangle size={24} />
                         ) : (
                           <CheckCircle size={24} />
@@ -268,17 +299,31 @@ function App() {
                       <div className="space-y-6">
                         <div className="bg-black/20 rounded-2xl p-5 border border-white/5">
                           <p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Detected Vectors:</p>
-                          <div className="space-y-4">
+                          <div className="space-y-5">
                             {result.alertPayload.tactics.map((t, i) => (
                               <div key={i} className="group">
-                                <div className="flex justify-between items-center mb-1">
+                                <div className="flex justify-between items-start mb-1.5">
                                   <span className="text-sm font-bold text-slate-100 flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgb(59,130,246)]" />
                                     {t.name}
+                                    {t.isAdvanced ? (
+                                      <span className="text-[9px] bg-purple-500/15 text-purple-300 px-1.5 py-0.5 rounded-full border border-purple-500/30 font-black tracking-tight">ADV</span>
+                                    ) : (
+                                      <span className="text-[9px] bg-slate-600/30 text-slate-400 px-1.5 py-0.5 rounded-full border border-slate-600/30 font-black tracking-tight">CORE</span>
+                                    )}
+                                    {t.amplified && (
+                                      <span className="text-[9px] bg-orange-500/10 text-orange-400 px-1.5 py-0.5 rounded-full border border-orange-500/20 font-black tracking-tight">AMPLIFIED</span>
+                                    )}
+                                    {t.neutralized && (
+                                      <span className="text-[9px] bg-teal-500/10 text-teal-400 px-1.5 py-0.5 rounded-full border border-teal-500/20 font-black tracking-tight">CONTEXT↓</span>
+                                    )}
                                   </span>
-                                  <span className="text-[10px] font-mono font-black text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded border border-blue-400/20">
-                                    CONFIDENCE: {t.confidence}%
-                                  </span>
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    <span className="text-[9px] font-mono text-slate-600">{t.matchCount}x match</span>
+                                    <span className="text-[10px] font-mono font-black text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded border border-blue-400/20">
+                                      {t.confidence}%
+                                    </span>
+                                  </div>
                                 </div>
                                 <p className="text-xs text-slate-400 pl-3.5 leading-relaxed mt-1 opacity-80 group-hover:opacity-100 transition-opacity">
                                   {t.explanation}
@@ -288,15 +333,17 @@ function App() {
                           </div>
                         </div>
 
-                        <div className="p-5 bg-slate-950/40 rounded-2xl border border-slate-800/50">
-                          <p className="text-xs font-black text-slate-500 mb-2 uppercase tracking-tight flex items-center gap-2">
-                            <Info size={12} />
-                            Cognitive Impact Assessment
-                          </p>
-                          <p className="text-sm text-slate-300 font-medium leading-relaxed italic">
-                            &quot;{result.alertPayload.impactWarning}&quot;
-                          </p>
-                        </div>
+                        {result.alertPayload.impactWarning && (
+                          <div className="p-5 bg-slate-950/40 rounded-2xl border border-slate-800/50">
+                            <p className="text-xs font-black text-slate-500 mb-2 uppercase tracking-tight flex items-center gap-2">
+                              <Info size={12} />
+                              Cognitive Impact Assessment
+                            </p>
+                            <p className="text-sm text-slate-300 font-medium leading-relaxed italic">
+                              &quot;{result.alertPayload.impactWarning}&quot;
+                            </p>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <p className="text-sm text-slate-400 italic bg-black/20 p-4 rounded-xl border border-white/5">
@@ -310,49 +357,88 @@ function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 p-6 rounded-3xl relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -mr-16 -mt-16 blur-3xl transition-all group-hover:bg-blue-500/10" />
-                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-3">Threat Intensity</p>
+                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-3">Manipulation Risk Score</p>
                     <div className="flex items-end gap-3">
-                      <span className={`text-6xl font-black leading-none ${result.riskLevel === 'CRITICAL' ? 'text-red-500' :
+                      <span className={`text-6xl font-black leading-none ${
+                        result.riskLevel === 'CRITICAL' ? 'text-red-500' :
                         result.riskLevel === 'HIGH' ? 'text-orange-500' :
-                          result.riskLevel === 'ELEVATED' ? 'text-yellow-500' : 'text-emerald-500'
-                        }`}>
-                        {Math.round(result.intensityScore * 100)}
+                        result.riskLevel === 'MEDIUM' ? 'text-yellow-500' :
+                        result.riskLevel === 'LOW' ? 'text-sky-400' :
+                        'text-emerald-500'
+                      }`}>
+                        {result.riskAnalysis?.score ?? Math.round(result.intensityScore * 100)}
                       </span>
                       <div className="flex flex-col mb-1">
                         <span className="text-xs font-bold text-slate-600">/ 100</span>
-                        <span className={`text-[11px] font-black uppercase tracking-tighter ${result.riskLevel === 'CRITICAL' ? 'text-red-500' :
+                        <span className={`text-[11px] font-black uppercase tracking-tighter ${
+                          result.riskLevel === 'CRITICAL' ? 'text-red-500' :
                           result.riskLevel === 'HIGH' ? 'text-orange-500' :
-                            result.riskLevel === 'ELEVATED' ? 'text-yellow-500' : 'text-emerald-400'
-                          }`}>
-                          {result.riskLevel} SEVERITY
+                          result.riskLevel === 'MEDIUM' ? 'text-yellow-500' :
+                          result.riskLevel === 'LOW' ? 'text-sky-400' :
+                          'text-emerald-400'
+                        }`}>
+                          {result.riskLevel} RISK
                         </span>
                       </div>
                     </div>
+                    {result.riskAnalysis?.breakdown?.compoundBonus > 0 && (
+                      <div className="mt-3 space-y-1">
+                        {result.riskAnalysis.breakdown.advancedPatternBonus > 0 && (
+                          <div className="text-[9px] font-mono text-purple-400/70 bg-purple-500/5 border border-purple-500/10 px-2 py-1 rounded-lg">+{result.riskAnalysis.breakdown.advancedPatternBonus}pts advanced pattern bonus</div>
+                        )}
+                        {result.riskAnalysis.breakdown.sextortionBonus > 0 && (
+                          <div className="text-[9px] font-mono text-red-400/70 bg-red-500/5 border border-red-500/10 px-2 py-1 rounded-lg">+{result.riskAnalysis.breakdown.sextortionBonus}pts sextortion severity bonus</div>
+                        )}
+                        {result.riskAnalysis.breakdown.coordinationBonus > 0 && (
+                          <div className="text-[9px] font-mono text-orange-400/70 bg-orange-500/5 border border-orange-500/10 px-2 py-1 rounded-lg">+{result.riskAnalysis.breakdown.coordinationBonus}pts multi-tactic coordination bonus</div>
+                        )}
+                        {result.riskAnalysis.breakdown.multiAdvancedBonus > 0 && (
+                          <div className="text-[9px] font-mono text-pink-400/70 bg-pink-500/5 border border-pink-500/10 px-2 py-1 rounded-lg">+{result.riskAnalysis.breakdown.multiAdvancedBonus}pts compound advanced tactics bonus</div>
+                        )}
+                        {result.riskAnalysis.breakdown.layeredBonus > 0 && (
+                          <div className="text-[9px] font-mono text-yellow-400/70 bg-yellow-500/5 border border-yellow-500/10 px-2 py-1 rounded-lg">+{result.riskAnalysis.breakdown.layeredBonus}pts layered attack bonus</div>
+                        )}
+      {result.riskAnalysis.breakdown.legacyCompoundBonus > 0 && (
+                          <div className="text-[9px] font-mono text-orange-400/70 bg-orange-500/5 border border-orange-500/10 px-2 py-1 rounded-lg">+{result.riskAnalysis.breakdown.legacyCompoundBonus}pts compound tactic bonus</div>
+                        )}
+                      </div>
+                    )}
+                    {result.riskAnalysis?.breakdown?.benignContextPenalty > 0 && (
+                      <div className="mt-2 text-[9px] font-mono text-teal-400/70 bg-teal-500/5 border border-teal-500/10 px-2 py-1 rounded-lg">
+                        −{result.riskAnalysis.breakdown.benignContextPenalty}pts benign context penalty applied
+                      </div>
+                    )}
                   </div>
 
                   <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800/50 p-6 rounded-3xl space-y-4">
-                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Audit Breakdown</p>
+                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Score Breakdown</p>
                     <div className="space-y-3">
                       {[
-                        { label: 'Emotion Spectrum', val: result.riskAnalysis?.breakdown?.emotionalIntensity, color: 'bg-blue-500' },
-                        { label: 'Confidence Score', val: result.riskAnalysis?.breakdown?.confidenceAggregation, color: 'bg-purple-500' },
-                        { label: 'Tactical Density', val: result.riskAnalysis?.breakdown?.densityFactor, color: 'bg-emerald-500' }
+                        { label: 'Intensity (I)', val: result.riskAnalysis?.breakdown?.emotionalIntensity, color: 'bg-blue-500' },
+                        { label: 'Confidence (C)', val: result.riskAnalysis?.breakdown?.confidenceAggregation, color: 'bg-purple-500' },
+                        { label: 'Density (D)', val: result.riskAnalysis?.breakdown?.densityFactor, color: 'bg-emerald-500' },
+                        { label: 'Amplifiers (A)', val: result.riskAnalysis?.breakdown?.amplifierPresence, color: 'bg-orange-500' }
                       ].map((item, i) => (
                         <div key={i} className="space-y-1.5">
                           <div className="flex justify-between text-[10px] font-black uppercase tracking-tighter">
                             <span className="text-slate-400">{item.label}</span>
-                            <span className="text-white">{item.val}%</span>
+                            <span className="text-white">{item.val ?? 0}%</span>
                           </div>
                           <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                             <motion.div
                               initial={{ width: 0 }}
-                              animate={{ width: `${item.val}%` }}
+                              animate={{ width: `${item.val ?? 0}%` }}
                               className={`h-full ${item.color}`}
                             />
                           </div>
                         </div>
                       ))}
                     </div>
+                    {result.riskAnalysis?.formula && (
+                      <div className="mt-4 pt-4 border-t border-slate-800/50">
+                        <p className="text-[10px] text-slate-500 font-mono text-center leading-relaxed">{result.riskAnalysis.formula}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -368,23 +454,36 @@ function App() {
                         <div key={idx} className="p-6 hover:bg-white/5 transition-colors group">
                           <div className="flex justify-between items-start mb-3">
                             <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-1">
+                              <div className="flex items-center gap-2 flex-wrap mb-2">
                                 <span className={`text-sm font-black tracking-tight ${det.isLowCertainty ? 'text-slate-500 italic' : 'text-slate-100'}`}>
                                   {det.displayLabel}
                                 </span>
+                                <span className="text-[9px] font-mono text-slate-600 bg-slate-800/40 px-2 py-0.5 rounded">{det.confidencePercent}% conf</span>
+                                {det._isAdvanced ? (
+                                  <span className="text-[9px] bg-purple-500/15 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30 font-black">ADV</span>
+                                ) : (
+                                  <span className="text-[9px] bg-slate-600/30 text-slate-400 px-2 py-0.5 rounded-full border border-slate-600/30 font-black">CORE</span>
+                                )}
                                 {det.isAmbiguous && (
-                                  <span className="text-[9px] bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded-full border border-yellow-500/20 font-black">
-                                    AMBIGUOUS
-                                  </span>
+                                  <span className="text-[9px] bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded-full border border-yellow-500/20 font-black">AMBIGUOUS</span>
+                                )}
+                                {det.contextSignals?.amplified && (
+                                  <span className="text-[9px] bg-orange-500/10 text-orange-400 px-2 py-0.5 rounded-full border border-orange-500/20 font-black">AMPLIFIED</span>
+                                )}
+                                {det.contextSignals?.neutralized && (
+                                  <span className="text-[9px] bg-teal-500/10 text-teal-400 px-2 py-0.5 rounded-full border border-teal-500/20 font-black">CONTEXT&darr;</span>
+                                )}
+                                {det.contextSignals?.benignContext && (
+                                  <span className="text-[9px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/20 font-black">BENIGN CTX</span>
                                 )}
                               </div>
                               <p className="text-[13px] text-slate-400 leading-relaxed font-medium opacity-70 group-hover:opacity-100 transition-opacity pr-8">
                                 {det.description}
                               </p>
                             </div>
-                            <div className="text-right">
+                            <div className="text-right shrink-0 pl-4">
                               <div className="text-xs font-black text-white mb-1">{det.count}x</div>
-                              <div className="text-[9px] font-mono text-slate-600 uppercase">Instances</div>
+                              <div className="text-[9px] font-mono text-slate-600 uppercase">Matches</div>
                             </div>
                           </div>
 
@@ -397,10 +496,10 @@ function App() {
                             </div>
                           )}
 
-                          <div className="mt-4 flex gap-2 overflow-x-auto no-scrollbar pb-1">
-                            {det.evidence.slice(0, 2).map((ev, i) => (
-                              <div key={i} className="text-[10px] font-mono px-3 py-2 bg-black/40 border border-slate-800/50 text-slate-400 rounded-lg whitespace-nowrap opacity-60 hover:opacity-100 transition-opacity">
-                                &quot;{ev.context.length > 40 ? ev.context.substring(0, 40) + '...' : ev.context}&quot;
+                          <div className="mt-3 flex flex-col gap-2">
+                            {det.evidence.slice(0, 3).map((ev, i) => (
+                              <div key={i} className="text-[10px] font-mono px-3 py-2 bg-black/40 border border-slate-800/50 text-slate-400 rounded-lg opacity-60 hover:opacity-100 transition-opacity leading-relaxed break-all">
+                                &quot;{ev.context.length > 100 ? ev.context.substring(0, 100) + '...' : ev.context}&quot;
                               </div>
                             ))}
                           </div>
@@ -422,8 +521,7 @@ function App() {
 
         <footer className="mt-20 pb-8 text-slate-600 text-[11px] font-mono text-center space-y-3 pointer-events-auto">
           <div className="flex justify-center flex-wrap gap-6 items-center">
-            <span className="font-bold text-slate-800 opacity-50 uppercase tracking-[0.2em]">CyberEDT Security Infrastructure</span>
-            <div className="w-1 h-1 rounded-full bg-slate-800" />
+
             <button
               onClick={() => setCurrentView('privacy')}
               className="hover:text-blue-400 transition-colors uppercase tracking-widest"
@@ -438,7 +536,7 @@ function App() {
               Terms of Engagement
             </button>
           </div>
-          <div className="opacity-40">© 2024 Cognitive Defense Systems. All rights reserved.</div>
+          <div className="opacity-40">© 2026 CyberEDT. All rights reserved.</div>
         </footer>
       </div>
     </div >
@@ -472,7 +570,7 @@ function App() {
         </div>
 
         <footer className="mt-auto pt-12 pb-4 text-slate-500 text-xs font-mono text-center space-y-2 pointer-events-auto">
-          <div>© 2024 CyberEDT. All rights reserved</div>
+          <div>© 2026 CyberEDT. All rights reserved</div>
           <div className="flex justify-center gap-4">
             <button
               onClick={() => setCurrentView('privacy')}
@@ -511,10 +609,10 @@ function App() {
       <nav className="relative z-20 w-full border-b border-slate-800/50 bg-[#0a0a0b]/80 backdrop-blur-md">
         <div className="max-w-[1200px] mx-auto px-6 h-16 flex justify-between items-center text-[13px] font-medium tracking-wide">
           <div
-            className="text-white font-black text-xl cursor-pointer"
+            className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => setCurrentView('main')}
           >
-            PsyWall
+            <img src={logoImage} alt="PsyWall Logo" className="h-8 w-auto object-contain" />
           </div>
           <div className="flex gap-8 items-center">
             <button onClick={() => setCurrentView('main')} className="text-slate-500 hover:text-white transition-colors">Analyze</button>
@@ -537,7 +635,7 @@ function App() {
 
       <footer className="relative z-10 py-12 border-t border-slate-800/30">
         <div className="max-w-[1200px] mx-auto px-6 flex flex-col items-center gap-4 text-[11px] font-mono text-slate-600">
-          <div>© 2024 CyberEDT</div>
+          <div>© 2026 CyberEDT</div>
           <div className="flex gap-4">
             <button onClick={() => setCurrentView('privacy')} className="hover:text-slate-400 transition-colors">Privacy</button>
             <span className="text-slate-800">|</span>
@@ -566,10 +664,10 @@ function App() {
       <nav className="relative z-20 w-full border-b border-slate-800/50 bg-[#0a0a0b]/80 backdrop-blur-md">
         <div className="max-w-[1200px] mx-auto px-6 h-16 flex justify-between items-center text-[13px] font-medium tracking-wide">
           <div
-            className="text-white font-black text-xl cursor-pointer"
+            className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => setCurrentView('main')}
           >
-            PsyWall
+            <img src={logoImage} alt="PsyWall Logo" className="h-8 w-auto object-contain" />
           </div>
           <div className="flex gap-8 items-center">
             <button onClick={() => setCurrentView('main')} className="text-slate-500 hover:text-white transition-colors">Analyze</button>
@@ -591,7 +689,7 @@ function App() {
 
       <footer className="relative z-10 py-12 border-t border-slate-800/30">
         <div className="max-w-[1200px] mx-auto px-6 flex flex-col items-center gap-4 text-[11px] font-mono text-slate-600">
-          <div>© 2024 CyberEDT</div>
+          <div>© 2026 CyberEDT</div>
           <div className="flex gap-4">
             <button onClick={() => setCurrentView('privacy')} className="hover:text-slate-400 transition-colors">Privacy</button>
             <span className="text-slate-800">|</span>
@@ -630,7 +728,7 @@ function App() {
         </div>
 
         <footer className="mt-auto pt-12 pb-4 text-slate-500 text-xs font-mono text-center space-y-2 pointer-events-auto">
-          <div>© 2024 CyberEDT. All rights reserved</div>
+          <div>© 2026 CyberEDT. All rights reserved</div>
           <div className="flex justify-center gap-4">
             <button
               onClick={() => setCurrentView('privacy')}

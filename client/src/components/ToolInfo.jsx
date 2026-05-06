@@ -11,7 +11,7 @@ const ToolInfo = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-5xl font-black text-white mb-6 tracking-tight"
                 >
-                    Cognitive Manipulation Detection Engine
+                    PsyWall (MIDS): A Cognitive Firewall for Human-Centric Security
                 </motion.h1>
                 <motion.p
                     initial={{ opacity: 0, y: 10 }}
@@ -28,10 +28,10 @@ const ToolInfo = () => {
                 <div className="space-y-6">
                     <h2 className="text-2xl font-bold text-white uppercase tracking-widest text-sm text-blue-500">Overview</h2>
                     <p className="text-lg leading-relaxed text-slate-400">
-                        PsyWall represents the next frontier in defensive cognitive security. As digital discourse becomes increasingly saturated with sophisticated influence operations, PsyWall provides an analytical layer that strips away emotional framing to reveal the underlying structural tactics used to shape human perception.
+                        PsyWall is a Cognitive Firewall that operates as a Mental Intrusion Detection System (MIDS). Just as a conventional firewall inspects network packets for threat signatures before they reach a system, PsyWall inspects digital content for cognitive threat signatures before they reach the user's decision-making process.
                     </p>
                     <p className="text-lg leading-relaxed text-slate-400">
-                        Designed for researchers, analysts, and security-conscious individuals, the engine processes natural language through a multi-stage classification pipeline to identify known psychological exploitation patterns.
+                        The system analyzes digital text in real time, detecting linguistic patterns associated with psychological manipulation, and classifies them into six cognitive bias categories grounded in behavioral psychology research by Cialdini and Kahneman.
                     </p>
                 </div>
                 <div className="bg-[#111113] border border-slate-800 p-8 rounded-lg shadow-sm">
@@ -60,12 +60,12 @@ const ToolInfo = () => {
                 <h2 className="text-center text-sm font-black text-blue-500 uppercase tracking-[0.3em] mb-12">Detection Intelligence</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {[
-                        { title: 'Artificial Urgency', desc: 'Pressure-inducing timestamps and false deadlines designed to bypass rational friction.' },
-                        { title: 'Fear-based Persuasion', desc: 'Catastrophizing narratives aimed at triggering the amygdala for rapid decision making.' },
-                        { title: 'Authority Bias', desc: 'Exploitation of perceived expertise or institutional rank to suppress critical questioning.' },
-                        { title: 'Scarcity Framing', desc: 'Manipulating perceived value through coordinated signaling of limited availability.' },
-                        { title: 'Social Proof Pressure', desc: 'Leveraging manufactured consensus to induce conformity and herd behavior.' },
-                        { title: 'Emotional Exploitation', desc: 'Precise targeting of specific sentimental vulnerabilities to cloud logical evaluation.' }
+                        { title: 'Fear Amplification', desc: 'Generates disproportionate anxiety about a stated or implied threat to motivate compliance.' },
+                        { title: 'Scarcity and Urgency Framing', desc: 'Creates artificial time or resource pressure to compress decision time and suppress reasoning.' },
+                        { title: 'Authority Exploitation', desc: 'Leverages perceived institutional or expert credibility to lower the critical evaluation threshold.' },
+                        { title: 'Social Proof Manipulation', desc: 'Uses real or fabricated evidence of peer behavior to trigger conformity heuristics.' },
+                        { title: 'Reciprocity Baiting', desc: 'Establishes a prior exchange — real or implied — to create a sense of obligation.' },
+                        { title: 'Commitment Trapping', desc: 'References a previous action or agreement by the target to constrain current choices through consistency pressure.' }
                     ].map((card, i) => (
                         <div key={i} className="bg-[#0e0e0f] border border-slate-800/50 p-6 rounded-lg hover:border-slate-700 transition-colors group">
                             <div className="w-8 h-8 border border-slate-800 rounded mb-4 flex items-center justify-center text-[10px] text-slate-600 group-hover:border-blue-500/50 group-hover:text-blue-500 transition-colors">
