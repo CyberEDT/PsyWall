@@ -4,6 +4,8 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import { config } from './config/env.js';
 import analyzeRoute from './api/analyzeRoute.js';
+import urlIntelRoute from './api/urlIntelRoute.js';
+import visionRoute from './api/visionRoute.js';
 import { securityMiddleware } from './api/middleware/security.js';
 
 const app = express();
@@ -85,6 +87,8 @@ app.use(securityMiddleware);
 
 // Routes
 app.use('/api/analyze', analyzeRoute);
+app.use('/api/analyze-url', urlIntelRoute);
+app.use('/api/analyze-image', visionRoute);
 
 // Global Health Check
 app.get('/api/health', (req, res) => {

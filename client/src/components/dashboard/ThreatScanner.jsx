@@ -38,89 +38,53 @@ export default function ThreatScanner() {
 
     if (scanMode === 'url') {
       try {
-        let resData;
-        try {
-          const res = await fetch('/api/scan-url', {
-             method: 'POST',
-             headers: { 'Content-Type': 'application/json' },
-             body: JSON.stringify({ url: urlInput })
-          });
-          resData = await res.json();
-        } catch (e) {
-          // Fallback if local Vercel server isn't running
-          const lowerUrl = urlInput.toLowerCase();
-          const isSuspicious = lowerUrl.includes('login') || lowerUrl.includes('secure') || lowerUrl.includes('verify') || lowerUrl.includes('.xyz') || lowerUrl.includes('-');
-          score = isSuspicious ? 88 : 12;
-          resData = {
-            status: 'success',
-            riskAnalysis: { score },
-            urlIntel: {
-              originalUrl: urlInput,
-              finalUrl: isSuspicious ? 'https://secure-login-portal-auth.com/' : urlInput,
-              redirects: isSuspicious ? [urlInput, 'https://bit.ly/xyz123', 'https://secure-login-portal-auth.com/'] : [urlInput],
-              domainAge: isSuspicious ? '3 days' : '10+ years',
-              registrar: isSuspicious ? 'CheapDomains LLC' : 'MarkMonitor Inc.',
-              sslStatus: isSuspicious ? 'Invalid/Self-Signed' : 'Valid (RSA 2048)',
-            },
-            alertPayload: {
-              title: score > 70 ? 'High-Risk Domain Detected' : 'Domain Appears Safe',
-              message: score > 70 ? 'This URL exhibits multiple indicators of compromise (IOCs).' : 'No immediate red flags detected.',
-              impactWarning: score > 70 ? 'Do not enter credentials. This is likely a credential harvesting page.' : null
-            },
-            detections: isSuspicious ? [
-              { displayLabel: 'Suspicious Redirect Chain', confidencePercent: 95, _isAdvanced: true, description: 'Passes through multiple URL shorteners.', evidence: [{ context: 'Redirects via bit.ly' }] },
-              { displayLabel: 'Newly Registered Domain', confidencePercent: 90, description: 'Registered less than 72 hours ago.', evidence: [{ context: 'Domain Age: 3 days' }] }
-            ] : []
-          };
-        }
+        const res = await fetch('http://localhost:5000/api/analyze-url', {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ url: urlInput })
+        });
+        const resData = await res.json();
         payload = resData;
-        score = payload.riskAnalysis.score;
+        if (payload.status === 'success') {
+          score = payload.riskAnalysis.score;
+        }
       } catch (err) {
-        payload = { error: "Failed to connect to URL Intelligence Engine." };
+        payload = { error: "Failed to connect to URL Intelligence Engine API. Ensure backend is running." };
       }
     } else if (scanMode === 'image') {
-       // Simulate Vision API OCR Extraction
-       await new Promise(r => setTimeout(r, 2500));
-       score = 89;
-       
-       const extractedOcrText = "URGENT PAYMENT REQUIRED\n\nDear Customer,\nYour account will be suspended in 24 hours due to unpaid fees. Please click the link below to verify your identity and process the payment immediately.\n\nSupport Team";
+      try {
+        const formData = new FormData();
+        formData.append('image', imageFile);
 
-       payload = {
-          status: 'success',
-          riskAnalysis: { score },
-          extractedText: extractedOcrText, // Save for UI
-          alertPayload: {
-             title: 'Malicious Image Artifact Detected',
-             message: 'OCR extracted urgent demands for payment hidden in the image pixels.',
-             impactWarning: 'Fraudsters use images to bypass text-based spam filters. Do not pay.'
-          },
-          detections: [
-             { displayLabel: 'Filter Evasion (Image)', confidencePercent: 98, _isAdvanced: true, description: 'Text embedded in image to avoid signature detection.', evidence: [{context: 'Extracted: "URGENT PAYMENT REQUIRED"'}] },
-             { displayLabel: 'Coercion', confidencePercent: 85, description: 'Threats of account suspension found in OCR.', evidence: [{context: 'Extracted: "Account suspended in 24 hours"'}] }
-          ]
-       };
-       // Override targetText so the OCR text is saved to Supabase instead of filename
-       targetText = extractedOcrText;
+        const res = await fetch('http://localhost:5000/api/analyze-image', {
+           method: 'POST',
+           body: formData
+        });
+        const resData = await res.json();
+        payload = resData;
+        if (payload.status === 'success') {
+          score = payload.riskAnalysis.score;
+          targetText = payload.extractedText; // Override for storage
+        }
+      } catch (err) {
+        payload = { error: "Failed to connect to Vision OCR API. Ensure backend is running." };
+      }
     } else {
-       // Text Analysis
-       await new Promise(r => setTimeout(r, 1500));
-       const lower = inputText.toLowerCase();
-       const isUrgent = lower.includes('urgent') || lower.includes('immediate') || lower.includes('now');
-       const isFinancial = lower.includes('bank') || lower.includes('account') || lower.includes('money');
-       score = isUrgent && isFinancial ? 94 : isUrgent ? 85 : isFinancial ? 72 : 35;
-       payload = {
-         status: 'success',
-         riskAnalysis: { score },
-         alertPayload: {
-           title: score > 70 ? 'Critical Manipulation Detected' : 'Minimal Psychological Pressure',
-           message: score > 70 ? 'Patterns designed to force quick action.' : 'Standard communicative patterns.',
-           impactWarning: score > 70 ? 'This message triggers fear/urgency. Verify out-of-band.' : null
-         },
-         detections: [
-           ...(score > 70 ? [{ displayLabel: 'Artificial Urgency', confidencePercent: 92, _isAdvanced: true, description: 'Manufactured deadlines.', evidence: [{ context: inputText.substring(0, 20) }] }] : []),
-           ...(isFinancial ? [{ displayLabel: 'Authority Bias', confidencePercent: 88, description: 'Leveraging institutional authority.', evidence: [{ context: 'References to finance' }] }] : [])
-         ]
-       };
+      // Text Analysis
+      try {
+        const res = await fetch('http://localhost:5000/api/analyze', {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ text: inputText })
+        });
+        const resData = await res.json();
+        payload = resData;
+        if (payload.status === 'success') {
+          score = payload.riskAnalysis.score;
+        }
+      } catch (err) {
+        payload = { error: "Failed to connect to Cognitive AI Engine. Ensure backend is running." };
+      }
     }
 
     setLoading(false);

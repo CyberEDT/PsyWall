@@ -3,31 +3,113 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ══════════════════════════════════════════
+       PRIMARY SEO
+  ══════════════════════════════════════════ -->
   <title>PsyWall (MIDS): A Cognitive Firewall for Human-Centric Security</title>
-  <meta name="description" content="PsyWall is an advanced cognitive firewall designed to detect psychological manipulation, phishing attempts, and social engineering in real-time. Protect yourself from digital manipulation." />
-  <meta name="keywords" content="cognitive firewall, phishing detection, psychological manipulation, cyber security, social engineering, AI security, digital defense" />
+  <meta name="description" content="PsyWall is an advanced cognitive firewall that detects psychological manipulation, phishing, and social engineering in real-time — powered by AI-driven cognitive analysis." />
+  <meta name="keywords" content="cognitive firewall, phishing detection, psychological manipulation, cyber security, social engineering, AI security, MIDS, PsyWall, CyberEDT, digital defense, manipulation detection" />
   <meta name="author" content="CyberEDT" />
-  
-  <!-- Open Graph / Facebook -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://psywall.cyberedt.com/" />
+
+  <!-- ══════════════════════════════════════════
+       SECURITY META HEADERS
+  ══════════════════════════════════════════ -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
+
+  <!-- ══════════════════════════════════════════
+       OPEN GRAPH (Facebook / LinkedIn)
+  ══════════════════════════════════════════ -->
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PsyWall" />
   <meta property="og:url" content="https://psywall.cyberedt.com/" />
   <meta property="og:title" content="PsyWall (MIDS): A Cognitive Firewall for Human-Centric Security" />
-  <meta property="og:description" content="Advanced defense against psychological manipulation and phishing using cognitive analysis." />
-  <meta property="og:image" content="/logo.jpg" />
+  <meta property="og:description" content="Advanced real-time defense against psychological manipulation, phishing, and social engineering using cognitive AI analysis." />
+  <meta property="og:image" content="https://psywall.cyberedt.com/logo.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PsyWall – Cognitive Firewall Logo" />
+  <meta property="og:locale" content="en_US" />
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://psywall.cyberedt.com/" />
-  <meta property="twitter:title" content="PsyWall (MIDS): A Cognitive Firewall for Human-Centric Security" />
-  <meta property="twitter:description" content="Advanced defense against psychological manipulation and phishing using cognitive analysis." />
-  <meta property="twitter:image" content="/logo.jpg" />
+  <!-- ══════════════════════════════════════════
+       TWITTER / X CARD
+  ══════════════════════════════════════════ -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@CyberEDT" />
+  <meta name="twitter:creator" content="@CyberEDT" />
+  <meta name="twitter:url" content="https://psywall.cyberedt.com/" />
+  <meta name="twitter:title" content="PsyWall (MIDS): A Cognitive Firewall for Human-Centric Security" />
+  <meta name="twitter:description" content="Advanced real-time defense against psychological manipulation, phishing, and social engineering using cognitive AI analysis." />
+  <meta name="twitter:image" content="https://psywall.cyberedt.com/logo.jpg" />
+  <meta name="twitter:image:alt" content="PsyWall – Cognitive Firewall Logo" />
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- ══════════════════════════════════════════
+       PWA / ICONS
+  ══════════════════════════════════════════ -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#6c63ff" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="PsyWall" />
+  <link rel="apple-touch-icon" href="/logo.jpg" />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+
+  <!-- ══════════════════════════════════════════
+       JSON-LD STRUCTURED DATA
+  ══════════════════════════════════════════ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PsyWall",
+    "alternateName": "PsyWall MIDS",
+    "url": "https://psywall.cyberedt.com/",
+    "description": "PsyWall is an advanced cognitive firewall that detects psychological manipulation, phishing, and social engineering in real-time using AI-driven cognitive analysis.",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Web",
+    "browserRequirements": "Requires JavaScript. Works in all modern browsers.",
+    "inLanguage": "en",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "CyberEDT",
+      "url": "https://cyberedt.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://psywall.cyberedt.com/logo.jpg"
+      }
+    },
+    "image": "https://psywall.cyberedt.com/logo.jpg",
+    "screenshot": "https://psywall.cyberedt.com/logo.jpg",
+    "featureList": [
+      "Real-time psychological manipulation detection",
+      "Phishing attempt identification",
+      "Social engineering pattern recognition",
+      "Cognitive threat scoring",
+      "Manipulation tactic breakdown",
+      "Awareness training center"
+    ],
+    "keywords": "cognitive firewall, phishing detection, psychological manipulation, cyber security, social engineering, AI security"
+  }
+  </script>
+
+  <!-- ══════════════════════════════════════════
+       FONTS
+  ══════════════════════════════════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
 </head>
 
 <body>
@@ -35,4 +117,4 @@
   <script type="module" src="/src/main.jsx"></script>
 </body>
 
-</html>
+</html>
