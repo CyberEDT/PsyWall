@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   ShieldAlert, Lock, Webhook, Users, 
-  Key, Save, RefreshCw, Sliders, Database, EyeOff, Zap, CheckCircle2, Copy 
+  Key, Save, RefreshCw, Sliders, Database, EyeOff, Eye, Zap, CheckCircle2, Copy 
 } from 'lucide-react';
 
 export default function Settings() {
@@ -9,15 +9,14 @@ export default function Settings() {
   const [isSaving, setIsSaving] = useState(false);
   
   // High-fidelity mock state for interactive feel
-  const [config, setConfig] = useState({
+  const defaultConfig = {
     // Detection
-    cognitiveAi: true,
+    strictUrlChecking: true,
     sensitivityScore: 75,
-    onDeviceFallback: false,
+    ocrAggressiveMode: false,
     autoQuarantine: true,
     // Privacy
-    zeroKnowledge: true,
-    dataRetention: '30',
+    ephemeralAnalysis: true,
     shareTelemetry: false,
     // API
     webhookEnabled: true,
@@ -26,7 +25,24 @@ export default function Settings() {
     // Workspace
     orgName: 'CyberEDT SecOps',
     teamSize: '50-200'
+  };
+
+  const [savedConfig, setSavedConfig] = useState(() => {
+    const saved = localStorage.getItem('psywall_enterprise_config');
+    if (saved) {
+      try {
+        return { ...defaultConfig, ...JSON.parse(saved) };
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return defaultConfig;
   });
+
+  const [config, setConfig] = useState(savedConfig);
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const hasUnsavedChanges = JSON.stringify(config) !== JSON.stringify(savedConfig);
 
   const updateConfig = (key, value) => {
     setConfig(prev => ({ ...prev, [key]: value }));
@@ -34,7 +50,22 @@ export default function Settings() {
 
   const handleSave = () => {
     setIsSaving(true);
+    localStorage.setItem('psywall_enterprise_config', JSON.stringify(config));
+    setSavedConfig(config);
     setTimeout(() => setIsSaving(false), 800);
+  };
+
+  const handleClearData = () => {
+    if(window.confirm("Are you sure? This will delete all local settings and Academy progress.")) {
+      localStorage.clear();
+      window.location.reload();
+    }
+  };
+
+  const handleCopyApiKey = () => {
+    navigator.clipboard.writeText("psy_live_8f92a4bc03e149d7bf5a2b1f");
+    setCopySuccess(true);
+    setTimeout(() => setCopySuccess(false), 2000);
   };
 
   const Toggle = ({ enabled, onChange }) => (
@@ -104,14 +135,18 @@ export default function Settings() {
               </h1>
               <p className="text-sm text-gray-500 mt-1">Manage core settings and platform behavior.</p>
             </div>
-            <button 
-              onClick={handleSave}
-              disabled={isSaving}
-              className="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
-            >
-              {isSaving ? <RefreshCw size={16} className="animate-spin" /> : <Save size={16} />}
-              {isSaving ? 'Saving...' : 'Save Changes'}
-            </button>
+            <div className="h-10 flex items-center justify-end min-w-[140px]">
+              {hasUnsavedChanges && (
+                <button 
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-sm animate-in fade-in zoom-in duration-200"
+                >
+                  {isSaving ? <RefreshCw size={16} className="animate-spin" /> : <Save size={16} />}
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Content Panels */}
@@ -122,22 +157,22 @@ export default function Settings() {
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <section>
                   <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2 mb-4">
-                    <Zap size={16} className="text-indigo-500" /> Core AI Settings
+                    <Zap size={16} className="text-indigo-500" /> Scanner Configuration
                   </h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
                       <div>
-                        <p className="text-sm font-bold text-gray-900">Cognitive AI Engine (v3.2)</p>
-                        <p className="text-xs text-gray-500 mt-1">Utilize deep-context cloud models for psychological analysis.</p>
+                        <p className="text-sm font-bold text-gray-900">Strict URL Forensics</p>
+                        <p className="text-xs text-gray-500 mt-1">Automatically flag domains registered within the last 30 days or using complex homoglyphs.</p>
                       </div>
-                      <Toggle enabled={config.cognitiveAi} onChange={() => updateConfig('cognitiveAi', !config.cognitiveAi)} />
+                      <Toggle enabled={config.strictUrlChecking} onChange={() => updateConfig('strictUrlChecking', !config.strictUrlChecking)} />
                     </div>
                     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
                       <div>
-                        <p className="text-sm font-bold text-gray-900">On-Device Fallback (Air-gapped)</p>
-                        <p className="text-xs text-gray-500 mt-1">Process via local WebAssembly when network is isolated.</p>
+                        <p className="text-sm font-bold text-gray-900">Aggressive OCR Mode</p>
+                        <p className="text-xs text-gray-500 mt-1">Attempt to extract text from highly compressed, blurry, or noisy screenshot images.</p>
                       </div>
-                      <Toggle enabled={config.onDeviceFallback} onChange={() => updateConfig('onDeviceFallback', !config.onDeviceFallback)} />
+                      <Toggle enabled={config.ocrAggressiveMode} onChange={() => updateConfig('ocrAggressiveMode', !config.ocrAggressiveMode)} />
                     </div>
                   </div>
                 </section>
@@ -180,15 +215,15 @@ export default function Settings() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
                       <div>
-                        <p className="text-sm font-bold text-gray-900">Zero-Knowledge Mode</p>
-                        <p className="text-xs text-gray-500 mt-1">Encrypt analyzed payloads with a local client key before storage.</p>
+                        <p className="text-sm font-bold text-gray-900">Strict Ephemeral Mode</p>
+                        <p className="text-xs text-gray-500 mt-1">Purge all payload data from local memory immediately after closing the scan report. Never write to disk.</p>
                       </div>
-                      <Toggle enabled={config.zeroKnowledge} onChange={() => updateConfig('zeroKnowledge', !config.zeroKnowledge)} />
+                      <Toggle enabled={config.ephemeralAnalysis} onChange={() => updateConfig('ephemeralAnalysis', !config.ephemeralAnalysis)} />
                     </div>
                     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
                       <div>
                         <p className="text-sm font-bold text-gray-900">Global Threat Telemetry</p>
-                        <p className="text-xs text-gray-500 mt-1">Share anonymized vector metrics to improve the global defense grid.</p>
+                        <p className="text-xs text-gray-500 mt-1">Share anonymized psychological patterns (never payload content) to improve global detection.</p>
                       </div>
                       <Toggle enabled={config.shareTelemetry} onChange={() => updateConfig('shareTelemetry', !config.shareTelemetry)} />
                     </div>
@@ -197,24 +232,22 @@ export default function Settings() {
 
                 <section>
                   <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2 mb-4">
-                    <Database size={16} className="text-indigo-500" /> Retention Policy
+                    <Database size={16} className="text-indigo-500" /> Local Data Management
                   </h3>
-                  <div className="p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
-                    <label className="block text-sm font-bold text-gray-900 mb-2">Automated Purge Cycle</label>
-                    <select 
-                      value={config.dataRetention}
-                      onChange={(e) => updateConfig('dataRetention', e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5"
+                  <div className="p-4 bg-white border border-gray-200 rounded-xl shadow-sm flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">Clear Local Cache</p>
+                      <p className="text-xs text-gray-500 mt-1 flex items-start gap-1.5 max-w-sm">
+                        <ShieldAlert size={14} className="text-orange-500 shrink-0 mt-0.5" />
+                        Removes saved configuration and resets your Human Psychology Academy module progress.
+                      </p>
+                    </div>
+                    <button 
+                      onClick={handleClearData}
+                      className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-sm rounded-lg border border-red-100 transition-colors"
                     >
-                      <option value="7">7 Days (Strict Compliance)</option>
-                      <option value="14">14 Days (Standard)</option>
-                      <option value="30">30 Days (Extended)</option>
-                      <option value="90">90 Days (Audit Logging)</option>
-                    </select>
-                    <p className="text-xs text-gray-500 mt-3 flex items-start gap-2">
-                      <ShieldAlert size={14} className="text-orange-500 shrink-0 mt-0.5" />
-                      Data purged under this policy cannot be recovered. Ensure this aligns with your regional regulatory requirements.
-                    </p>
+                      Purge Data
+                    </button>
                   </div>
                 </section>
               </div>
@@ -266,10 +299,13 @@ export default function Settings() {
                         onClick={() => updateConfig('apiKeyVisible', !config.apiKeyVisible)}
                         className="p-2 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-lg text-gray-600 transition-colors"
                       >
-                        <EyeOff size={18} />
+                        {config.apiKeyVisible ? <Eye size={18} /> : <EyeOff size={18} />}
                       </button>
-                      <button className="p-2 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg text-indigo-600 transition-colors">
-                        <Copy size={18} />
+                      <button 
+                        onClick={handleCopyApiKey}
+                        className={`p-2 border rounded-lg transition-colors flex items-center justify-center ${copySuccess ? 'bg-emerald-50 border-emerald-200 text-emerald-600' : 'bg-indigo-50 hover:bg-indigo-100 border-indigo-200 text-indigo-600'}`}
+                      >
+                        {copySuccess ? <CheckCircle2 size={18} /> : <Copy size={18} />}
                       </button>
                     </div>
                   </div>
