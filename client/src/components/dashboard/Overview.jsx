@@ -38,11 +38,11 @@ export default function Overview() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6">
         
-        {/* Global Scam Trend */}
+        {/* Cognitive Threat Activity */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-base font-bold text-gray-900">Global Scam Trend</h3>
+              <h3 className="text-base font-bold text-gray-900">Cognitive Threat Activity</h3>
               <p className="text-xs text-gray-500 mt-0.5">Detections over the last 24 hours</p>
             </div>
             <div className="px-2.5 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full border border-green-100">
