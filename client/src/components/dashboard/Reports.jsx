@@ -1,8 +1,7 @@
 import React from 'react';
 import { DownloadCloud, MoreHorizontal } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../context/AuthContext';
+import { ShieldAlert } from 'lucide-react';
 
 const trendData = [
   { hour: '00:00', detections: 12 }, { hour: '01:00', detections: 8 },
@@ -21,30 +20,18 @@ const trendData = [
 
 export default function Reports() {
   const [reports, setReports] = React.useState([]);
-  const { user } = useAuth();
+  const [isEphemeral, setIsEphemeral] = React.useState(true);
 
   React.useEffect(() => {
-    const fetchScans = async () => {
-      if (!user) return;
-      const { data, error } = await supabase
-        .from('scans')
-        .select('*')
-        .order('created_at', { ascending: false });
-        
-      if (!error && data) {
-        setReports(data.map(scan => ({
-          id: scan.id,
-          subject: scan.ai_analysis?.alertPayload?.title || 'Scan Result',
-          channel: 'Scanner', // Hardcoded as all are from scanner right now
-          risk: scan.risk_score,
-          tactics: scan.ai_analysis?.detections?.length || 0,
-          status: scan.threat_level === 'Critical' ? 'Blocked' : 'Flagged',
-          timestamp: new Date(scan.created_at).getTime()
-        })));
-      }
-    };
-    fetchScans();
-  }, [user]);
+    const config = JSON.parse(localStorage.getItem('psywall_enterprise_config') || '{}');
+    const ephemeral = config.ephemeralAnalysis !== undefined ? config.ephemeralAnalysis : true;
+    setIsEphemeral(ephemeral);
+
+    if (!ephemeral) {
+      const savedReports = JSON.parse(localStorage.getItem('psywall_local_reports') || '[]');
+      setReports(savedReports);
+    }
+  }, []);
 
   const getRiskColor = (risk) => {
     if (risk >= 80) return 'bg-red-500';
@@ -165,7 +152,17 @@ export default function Reports() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {reports.length === 0 ? (
+              {isEphemeral ? (
+                <tr>
+                  <td colSpan="8" className="py-16 text-center">
+                    <div className="flex flex-col items-center justify-center text-gray-400">
+                      <ShieldAlert size={32} className="mb-3 text-indigo-300" />
+                      <p className="text-sm font-bold text-gray-700 mb-1">Strict Ephemeral Mode is Active</p>
+                      <p className="text-xs">No scan payloads are being written to local storage. Disable this in Configuration to keep history.</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : reports.length === 0 ? (
                 <tr>
                   <td colSpan="8" className="py-16 text-center text-sm font-medium text-gray-400">
                     No recent reports found. Run a scan in the Threat Scanner to generate a report.
@@ -173,11 +170,11 @@ export default function Reports() {
                 </tr>
               ) : (
                 reports.map((row, index) => {
-                  const seqId = reports.length - index;
+                  const seqId = row.id;
                   const formattedDate = new Date(row.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                   return (
                   <tr key={row.id} className="hover:bg-gray-50/80 transition-colors group">
-                    <td className="py-4 px-6 text-xs font-mono text-gray-400">PSY-{String(seqId).padStart(4, '0')}</td>
+                    <td className="py-4 px-6 text-xs font-mono text-gray-400">{seqId}</td>
                   <td className="py-4 px-6 text-sm font-medium text-gray-800 cursor-pointer hover:text-indigo-600 transition-colors">
                     {row.label || row.subject}
                   </td>

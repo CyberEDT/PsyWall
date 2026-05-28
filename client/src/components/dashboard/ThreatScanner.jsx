@@ -4,7 +4,6 @@ import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Responsi
 import { useNotifications } from '../../context/NotificationContext';
 import { useFeed } from '../../context/FeedContext';
 import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../lib/supabase';
 
 export default function ThreatScanner() {
   const [scanMode, setScanMode] = useState('text'); // 'text', 'url', 'image'
@@ -144,19 +143,25 @@ export default function ThreatScanner() {
         });
       }
 
-      if (user) {
-        supabase.from('scans').insert([{
-          user_id: user.id,
-          original_message: targetText,
-          risk_score: score,
-          threat_level: score > 70 ? 'Critical' : score > 35 ? 'Moderate' : 'Low',
-          threat_type: score > 70 ? 'Manipulation' : 'Standard',
-          ai_analysis: payload
-        }]).select().single().then(({ data, error }) => {
-          if (!error && data) {
-            setResult(prev => ({ ...prev, scan_id: data.id }));
-          }
-        });
+      // Respect Ephemeral Settings
+      const savedConfig = localStorage.getItem('psywall_enterprise_config');
+      const isEphemeral = savedConfig ? JSON.parse(savedConfig).ephemeralAnalysis : true;
+      
+      const scanId = 'PSY-' + Math.floor(Math.random() * 10000);
+      setResult(prev => ({ ...prev, scan_id: scanId }));
+
+      if (!isEphemeral) {
+        const existingReports = JSON.parse(localStorage.getItem('psywall_local_reports') || '[]');
+        const newReport = {
+          id: scanId,
+          subject: payload.alertPayload?.title || 'Scan Result',
+          channel: scanMode === 'text' ? 'Text/SMS' : scanMode === 'url' ? 'URL' : 'Image/OCR',
+          risk: score,
+          tactics: payload.detections?.length || 0,
+          status: score > 70 ? 'Blocked' : score > 35 ? 'Flagged' : 'Safe',
+          timestamp: Date.now()
+        };
+        localStorage.setItem('psywall_local_reports', JSON.stringify([newReport, ...existingReports].slice(0, 100)));
       }
     }
   };
