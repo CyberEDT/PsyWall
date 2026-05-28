@@ -1,54 +1,47 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const ToolInfo = () => {
     return (
-        <div className="max-w-[1200px] mx-auto px-6 py-12 text-slate-300 font-sans selection:bg-blue-500/30">
-            {/* HERO SECTION */}
-            <section className="text-center py-24 mb-16">
-                <motion.h1
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-5xl font-black text-white mb-6 tracking-tight"
-                >
+        <div className="max-w-4xl mx-auto py-12 px-6">
+            <Link to="/" className="inline-flex items-center gap-2 text-indigo-600 font-bold mb-8 hover:text-indigo-700">
+                <ArrowLeft size={16} /> Back to Home
+            </Link>
+            {/* HERO */}
+            <section>
+                <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                     PsyWall (MIDS): A Cognitive Firewall for Human-Centric Security
                 </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed"
-                >
+                <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
                     Analyze digital content for persuasion tactics, bias triggers, and emotional manipulation patterns in real time.
                 </motion.p>
             </section>
 
-            {/* WHAT IS PSYWALL */}
-            <section className="grid md:grid-cols-2 gap-16 mb-24 items-center">
-                <div className="space-y-6">
-                    <h2 className="text-2xl font-bold text-white uppercase tracking-widest text-sm text-blue-500">Overview</h2>
-                    <p className="text-lg leading-relaxed text-slate-400">
+            {/* OVERVIEW */}
+            <section>
+                <div>
+                    <h2>Overview</h2>
+                    <p>
                         PsyWall is a Cognitive Firewall that operates as a Mental Intrusion Detection System (MIDS). Just as a conventional firewall inspects network packets for threat signatures before they reach a system, PsyWall inspects digital content for cognitive threat signatures before they reach the user's decision-making process.
                     </p>
-                    <p className="text-lg leading-relaxed text-slate-400">
+                    <p>
                         The system analyzes digital text in real time, detecting linguistic patterns associated with psychological manipulation, and classifies them into six cognitive bias categories grounded in behavioral psychology research by Cialdini and Kahneman.
                     </p>
                 </div>
-                <div className="bg-[#111113] border border-slate-800 p-8 rounded-lg shadow-sm">
-                    <h3 className="text-white font-bold mb-6 text-lg uppercase tracking-wider">Key Highlights</h3>
-                    <ul className="space-y-4">
+                <div>
+                    <h3>Key Highlights</h3>
+                    <ul>
                         {[
                             { label: 'Real-time analysis', desc: 'Instantaneous linguistic processing' },
                             { label: 'Risk scoring engine', desc: 'Probabilistic manipulation intensity metrics' },
                             { label: 'Manipulation breakdown', desc: 'Categorical tactical identification' },
                             { label: 'Confidence indicator', desc: 'Statistical reliability mapping' }
                         ].map((item, i) => (
-                            <li key={i} className="flex flex-col">
-                                <span className="text-white font-semibold flex items-center gap-2">
-                                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-                                    {item.label}
-                                </span>
-                                <span className="text-sm text-slate-500 ml-3.5">{item.desc}</span>
+                            <li key={i}>
+                                <strong>{item.label}</strong>
+                                <span>{item.desc}</span>
                             </li>
                         ))}
                     </ul>
@@ -56,9 +49,9 @@ const ToolInfo = () => {
             </section>
 
             {/* WHAT IT DETECTS */}
-            <section className="mb-24">
-                <h2 className="text-center text-sm font-black text-blue-500 uppercase tracking-[0.3em] mb-12">Detection Intelligence</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <section>
+                <h2>Detection Intelligence</h2>
+                <div>
                     {[
                         { title: 'Fear Amplification', desc: 'Generates disproportionate anxiety about a stated or implied threat to motivate compliance.' },
                         { title: 'Scarcity and Urgency Framing', desc: 'Creates artificial time or resource pressure to compress decision time and suppress reasoning.' },
@@ -67,35 +60,30 @@ const ToolInfo = () => {
                         { title: 'Reciprocity Baiting', desc: 'Establishes a prior exchange — real or implied — to create a sense of obligation.' },
                         { title: 'Commitment Trapping', desc: 'References a previous action or agreement by the target to constrain current choices through consistency pressure.' }
                     ].map((card, i) => (
-                        <div key={i} className="bg-[#0e0e0f] border border-slate-800/50 p-6 rounded-lg hover:border-slate-700 transition-colors group">
-                            <div className="w-8 h-8 border border-slate-800 rounded mb-4 flex items-center justify-center text-[10px] text-slate-600 group-hover:border-blue-500/50 group-hover:text-blue-500 transition-colors">
-                                0{i + 1}
-                            </div>
-                            <h4 className="text-white font-bold mb-2">{card.title}</h4>
-                            <p className="text-sm text-slate-500 leading-relaxed">{card.desc}</p>
+                        <div key={i}>
+                            <span>0{i + 1}</span>
+                            <h4>{card.title}</h4>
+                            <p>{card.desc}</p>
                         </div>
                     ))}
                 </div>
             </section>
 
             {/* HOW IT WORKS */}
-            <section className="mb-24 py-16 border-y border-slate-800/30">
-                <h2 className="text-center text-sm font-black text-blue-500 uppercase tracking-[0.3em] mb-16">Operational Pipeline</h2>
-                <div className="max-w-xl mx-auto space-y-12">
+            <section>
+                <h2>Operational Pipeline</h2>
+                <div>
                     {[
                         { step: '01', title: 'Content Ingestion', desc: 'User inputs digital content via the interface or automated extension extraction.' },
                         { step: '02', title: 'Linguistic Scanning', desc: 'The engine performs deep syntactic analysis to isolate trigger phrases and structural markers.' },
                         { step: '03', title: 'Tactical Classification', desc: 'Pattern classifiers evaluate signals against our proprietary psychological framework.' },
                         { step: '04', title: 'Result Synthesis', desc: 'A weighted risk score and categorical breakdown are generated for the end-user.' }
                     ].map((item, i) => (
-                        <div key={i} className="relative flex gap-8">
-                            {i !== 3 && <div className="absolute left-[15px] top-10 bottom-[-48px] w-[1px] bg-slate-800"></div>}
-                            <div className="z-10 w-8 h-8 rounded-full bg-[#0a0a0b] border border-slate-700 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
-                                {item.step}
-                            </div>
-                            <div className="pb-1">
-                                <h4 className="text-white font-bold mb-1">{item.title}</h4>
-                                <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
+                        <div key={i}>
+                            <span>{item.step}</span>
+                            <div>
+                                <h4>{item.title}</h4>
+                                <p>{item.desc}</p>
                             </div>
                         </div>
                     ))}
@@ -103,12 +91,12 @@ const ToolInfo = () => {
             </section>
 
             {/* WHY IT MATTERS */}
-            <section className="mb-24 max-w-4xl mx-auto text-center">
-                <h2 className="text-sm font-black text-blue-500 uppercase tracking-[0.3em] mb-8">The Cognitive Threat Landscape</h2>
-                <p className="text-lg leading-relaxed text-slate-400 italic">
-                    &quot;In an era of algorithmic persuasion, the primary security vulnerability is no longer the network, but the human mind.&quot;
-                </p>
-                <p className="mt-8 text-slate-400 leading-relaxed">
+            <section>
+                <h2>The Cognitive Threat Landscape</h2>
+                <blockquote>
+                    "In an era of algorithmic persuasion, the primary security vulnerability is no longer the network, but the human mind."
+                </blockquote>
+                <p>
                     Digital manipulation has moved beyond simple marketing—it now shapes financial markets, political discourse, and institutional trust. By quantifying these invisible triggers, PsyWall empowers users to reclaim cognitive autonomy from automated influence systems and predatory communication strategies.
                 </p>
             </section>

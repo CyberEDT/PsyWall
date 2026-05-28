@@ -10,6 +10,16 @@ const DOMPurify = createDOMPurify(window);
 export const validateAnalysisRequest = (req, res, next) => {
     const { text } = req.body;
 
+    // Strict parameter validation to prevent parameter injection / mass-assignment
+    const keys = Object.keys(req.body);
+    if (keys.some(key => key !== 'text')) {
+        return res.status(400).json({
+            status: "error",
+            code: "INVALID_INPUT",
+            message: "Unexpected properties in request body."
+        });
+    }
+
     if (!text || typeof text !== 'string') {
         return res.status(400).json({
             status: "error",

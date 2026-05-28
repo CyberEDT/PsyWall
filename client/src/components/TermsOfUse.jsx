@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
-import logoImage from '../assets/logo/logo.png'
+import { Link } from 'react-router-dom'
+import { ArrowLeft, Shield } from 'lucide-react'
 
 const today = new Date().toLocaleDateString('en-US', {
   year: 'numeric',
@@ -10,159 +10,150 @@ const today = new Date().toLocaleDateString('en-US', {
 
 export default function TermsOfUse() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-8"
-    >
-      <header className="text-center mb-12">
-        <motion.div
-           initial={{ opacity: 0, scale: 0.95 }}
-           animate={{ opacity: 1, scale: 1 }}
-           className="flex flex-col items-center justify-center gap-4 mb-4"
-        >
-           <img src={logoImage} alt="PsyWall Logo" className="h-16 w-auto object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]" />
-           <h1 className="text-4xl font-black bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-             TERMS
-           </h1>
-        </motion.div>
-        <div className="text-slate-400 space-y-1">
-          <p className="text-sm">Last Updated: {today}</p>
-          <p className="text-sm">Operated by: PsyWall Team</p>
+    <div className="min-h-screen bg-slate-50 py-12 px-6 font-sans">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden">
+        
+        {/* Header */}
+        <div className="bg-slate-900 px-10 py-12 text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-30"></div>
+          
+          <Link to="/" className="inline-flex items-center gap-2 text-slate-300 font-semibold mb-8 hover:text-white transition-colors relative z-10">
+            <ArrowLeft size={16} /> Back to Home
+          </Link>
+          
+          <div className="relative z-10 flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm border border-white/20">
+               <Shield size={20} className="text-indigo-400" />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest">Legal Document</p>
+              <p className="text-sm font-semibold text-slate-300">PsyWall Team</p>
+            </div>
+          </div>
+          
+          <h1 className="text-4xl font-black tracking-tight mb-2 relative z-10">Terms of Use</h1>
+          <p className="text-slate-400 font-medium relative z-10">Last Updated: {today}</p>
         </div>
-      </header>
 
-      <div className="space-y-8 text-slate-300">
-        <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
-          <h2 className="text-2xl font-bold text-white mb-4">1. Introduction</h2>
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>PsyWall (&quot;Service&quot;) is a digital content analysis tool operated and owned by PsyWall Team (&quot;Company&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;).</p>
-            <p>By accessing or using the Service, you agree to these Terms of Use. If you do not agree, you must discontinue use immediately.</p>
-          </div>
-        </section>
+        {/* Content */}
+        <div className="px-10 py-12 text-slate-700 leading-relaxed space-y-10">
+          
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-indigo-100 text-indigo-700 text-xs font-black">1</span>
+              Introduction
+            </h2>
+            <div className="space-y-4 pl-9">
+              <p>PsyWall ("Service") is a digital content analysis tool operated and owned by PsyWall Team ("Company", "we", "us", "our").</p>
+              <p>By accessing or using the Service, you agree to these Terms of Use. If you do not agree, you must discontinue use immediately.</p>
+            </div>
+          </section>
 
-        <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
-          <h2 className="text-2xl font-bold text-white mb-4">2. Nature of the Service</h2>
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>PsyWall is a behavioral and psychological manipulation detection system designed to analyze digital content for patterns including:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4 text-slate-400">
-              <li>Artificial urgency</li>
-              <li>Scarcity triggers</li>
-              <li>Emotional exploitation</li>
-              <li>Authority bias activation</li>
-              <li>Social proof manipulation</li>
-              <li>Fear-based persuasion</li>
-              <li>Cognitive bias exploitation</li>
-            </ul>
-            <p className="mt-4">The Service provides analytical insights only.</p>
-            <p>It does not:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4 text-slate-400">
-              <li>Determine legality</li>
-              <li>Provide psychological diagnosis</li>
-              <li>Confirm intent</li>
-              <li>Offer legal or financial advice</li>
-              <li>Replace professional consultation</li>
-            </ul>
-            <p className="mt-4 font-semibold text-blue-400">All outputs are probabilistic assessments generated through automated systems.</p>
-          </div>
-        </section>
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-indigo-100 text-indigo-700 text-xs font-black">2</span>
+              Nature of the Service
+            </h2>
+            <div className="space-y-4 pl-9">
+              <p>PsyWall is a behavioral and psychological manipulation detection system designed to analyze digital content for patterns including:</p>
+              <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                <li>Artificial urgency</li>
+                <li>Scarcity triggers</li>
+                <li>Emotional exploitation</li>
+                <li>Authority bias activation</li>
+                <li>Social proof manipulation</li>
+                <li>Fear-based persuasion</li>
+                <li>Cognitive bias exploitation</li>
+              </ul>
+              <p>The Service provides analytical insights only. It does not:</p>
+              <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                <li>Determine legality</li>
+                <li>Provide psychological diagnosis</li>
+                <li>Confirm intent</li>
+                <li>Offer legal or financial advice</li>
+                <li>Replace professional consultation</li>
+              </ul>
+              <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl text-sm font-semibold mt-6">
+                All outputs are probabilistic assessments generated through automated systems.
+              </div>
+            </div>
+          </section>
 
-        <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
-          <h2 className="text-2xl font-bold text-white mb-4">3. AI & Automation Disclosure</h2>
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>The Service uses:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4 text-slate-400">
-              <li>Algorithmic pattern detection</li>
-              <li>Natural language processing models</li>
-              <li>Machine learning systems</li>
-              <li>Behavioral analysis frameworks</li>
-            </ul>
-            <p className="mt-4">Outputs are generated automatically and may contain inaccuracies, false positives, or incomplete interpretations.</p>
-            <p className="font-semibold text-yellow-400">PsyWall Team does not guarantee 100% detection accuracy.</p>
-          </div>
-        </section>
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-indigo-100 text-indigo-700 text-xs font-black">3</span>
+              AI & Automation Disclosure
+            </h2>
+            <div className="space-y-4 pl-9">
+              <p>The Service uses algorithmic pattern detection, natural language processing models, machine learning systems, and behavioral analysis frameworks.</p>
+              <p>Outputs are generated automatically and may contain inaccuracies, false positives, or incomplete interpretations.</p>
+              <p className="font-bold text-slate-900">PsyWall Team does not guarantee 100% detection accuracy.</p>
+            </div>
+          </section>
 
-        <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
-          <h2 className="text-2xl font-bold text-white mb-4">4. User Responsibilities</h2>
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>You agree not to:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4 text-slate-400">
-              <li>Use the Service for harassment or defamation</li>
-              <li>Use analysis results to target individuals or organizations</li>
-              <li>Submit illegal or malicious content</li>
-              <li>Attempt reverse engineering or system probing</li>
-              <li>Interfere with platform security</li>
-            </ul>
-            <p className="mt-4 font-semibold text-red-400">You are solely responsible for your decisions based on the output.</p>
-          </div>
-        </section>
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-indigo-100 text-indigo-700 text-xs font-black">4</span>
+              User Responsibilities
+            </h2>
+            <div className="space-y-4 pl-9">
+              <p>You agree not to:</p>
+              <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                <li>Use the Service for harassment or defamation</li>
+                <li>Use analysis results to target individuals or organizations</li>
+                <li>Submit illegal or malicious content</li>
+                <li>Attempt reverse engineering or system probing</li>
+                <li>Interfere with platform security</li>
+              </ul>
+              <p className="font-bold text-slate-900 mt-4">You are solely responsible for your decisions based on the output.</p>
+            </div>
+          </section>
 
-        <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
-          <h2 className="text-2xl font-bold text-white mb-4">5. Intellectual Property</h2>
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>All intellectual property rights related to:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4 text-slate-400">
-              <li>PsyWall algorithms</li>
-              <li>Risk scoring systems</li>
-              <li>Psychological detection frameworks</li>
-              <li>Interface design</li>
-              <li>Branding</li>
-            </ul>
-            <p className="mt-4 font-semibold text-purple-400">Belong exclusively to PsyWall Team.</p>
-            <p className="font-semibold text-purple-400">Unauthorized reproduction, distribution, or modification is prohibited.</p>
-          </div>
-        </section>
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-indigo-100 text-indigo-700 text-xs font-black">5</span>
+              Intellectual Property
+            </h2>
+            <div className="space-y-4 pl-9">
+              <p>All intellectual property rights related to PsyWall algorithms, risk scoring systems, psychological detection frameworks, interface design, and branding belong exclusively to PsyWall Team.</p>
+              <p className="font-bold text-slate-900">Unauthorized reproduction, distribution, or modification is prohibited.</p>
+            </div>
+          </section>
 
-        <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
-          <h2 className="text-2xl font-bold text-white mb-4">6. Limitation of Liability</h2>
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>To the fullest extent permitted by law, PsyWall Team shall not be liable for:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4 text-slate-400">
-              <li>Financial losses</li>
-              <li>Business losses</li>
-              <li>Reputational harm</li>
-              <li>Emotional distress</li>
-              <li>Misinterpretation of analysis</li>
-              <li>Third-party misuse</li>
-            </ul>
-            <p className="mt-4 font-mono text-xs text-slate-500">The Service is provided &quot;AS IS&quot; and &quot;AS AVAILABLE.&quot;</p>
-          </div>
-        </section>
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-indigo-100 text-indigo-700 text-xs font-black">6</span>
+              Limitation of Liability
+            </h2>
+            <div className="space-y-4 pl-9">
+              <p>To the fullest extent permitted by law, PsyWall Team shall not be liable for financial losses, business losses, reputational harm, emotional distress, misinterpretation of analysis, or third-party misuse.</p>
+              <p className="font-bold text-slate-900">The Service is provided "AS IS" and "AS AVAILABLE."</p>
+            </div>
+          </section>
 
-        <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
-          <h2 className="text-2xl font-bold text-white mb-4">7. Service Availability</h2>
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>PsyWall Team reserves right to:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4 text-slate-400">
-              <li>Modify features</li>
-              <li>Suspend access</li>
-              <li>Update detection models</li>
-              <li>Restrict users</li>
-              <li>Introduce paid tiers</li>
-            </ul>
-            <p className="mt-4 text-slate-400">Without prior notice.</p>
-          </div>
-        </section>
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-indigo-100 text-indigo-700 text-xs font-black">7</span>
+              Service Availability & Termination
+            </h2>
+            <div className="space-y-4 pl-9">
+              <p>PsyWall Team reserves right to modify features, suspend access, update detection models, restrict users, or introduce paid tiers without prior notice.</p>
+              <p>We may suspend or terminate access if Terms are violated, security risks are detected, or legal compliance requires action.</p>
+            </div>
+          </section>
 
-        <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
-          <h2 className="text-2xl font-bold text-white mb-4">8. Termination</h2>
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>We may suspend or terminate access if:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4 text-slate-400">
-              <li>Terms are violated</li>
-              <li>Security risks are detected</li>
-              <li>Legal compliance requires action</li>
-            </ul>
-          </div>
-        </section>
+          <section>
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-indigo-100 text-indigo-700 text-xs font-black">8</span>
+              Governing Law
+            </h2>
+            <div className="space-y-4 pl-9">
+              <p>These Terms shall be governed by the laws applicable to PsyWall Team's registered jurisdiction.</p>
+            </div>
+          </section>
 
-        <section className="bg-slate-900/40 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-2xl">
-          <h2 className="text-2xl font-bold text-white mb-4">9. Governing Law</h2>
-          <div className="space-y-3 text-sm leading-relaxed">
-            <p>These Terms shall be governed by the laws applicable to PsyWall Team&apos;s registered jurisdiction.</p>
-          </div>
-        </section>
-      </div>
-    </motion.div>
+        </div>
+      </motion.div>
+    </div>
   )
 }

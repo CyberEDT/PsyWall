@@ -42,6 +42,7 @@ export default defineConfig([
         caughtErrorsIgnorePattern: '^_',
       }],
       'react/prop-types': 'off',
+      'react/no-unescaped-entities': 'off',
     },
   },
 ])

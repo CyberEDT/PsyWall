@@ -1,3 +1,27 @@
+# PsyWall – Cognitive Firewall for Human-Centric Security
+# https://psywall.cyberedt.com
+
 User-agent: *
 Allow: /
+Allow: /tool-info
+Allow: /documentation
+Allow: /login
+Allow: /register
+Allow: /terms
+Allow: /privacy
+
+# Block all authenticated/private dashboard routes
+Disallow: /dashboard
+Disallow: /scanner
+Disallow: /manipulation
+Disallow: /reports
+Disallow: /awareness
+Disallow: /settings
+
+# Block API and internal paths
+Disallow: /api/
+Disallow: /_/
+
+Crawl-delay: 10
+
 Sitemap: https://psywall.cyberedt.com/sitemap.xml

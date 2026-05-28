@@ -16,9 +16,7 @@ The frontend is built for visual impact and high fidelity, following modern "Vis
 *   **Tailwind CSS 4.0**: A utility-first CSS framework integrated with Vite for high-performance styling.
 *   **Lucide React**: Modern, consistent icon set.
 
-### **Visual Effects (The "Wow" Factor)**
-*   **Three.js**: Low-level 3D graphics library.
-*   **React Three Fiber (R3F)** & **Drei**: React-based abstractions for Three.js, used for the "Liquid Ether" and "Floating Lines" background effects.
+### **Visual Effects & Animations**
 *   **Framer Motion**: Comprehensive animation library for fluid UI transitions and micro-interactions.
 
 ---
