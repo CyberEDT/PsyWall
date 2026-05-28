@@ -34,11 +34,11 @@ export default function ThreatScanner() {
 
     let payload = null;
     let score = 0;
-    const targetText = scanMode === 'text' ? inputText : scanMode === 'url' ? urlInput : (imageFile?.name || 'Uploaded Screenshot');
+    let targetText = scanMode === 'text' ? inputText : scanMode === 'url' ? urlInput : (imageFile?.name || 'Uploaded Screenshot');
 
     if (scanMode === 'url') {
       try {
-        const res = await fetch('http://localhost:5000/api/analyze-url', {
+        const res = await fetch('http://localhost:3001/api/analyze-url', {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({ url: urlInput })
@@ -56,7 +56,7 @@ export default function ThreatScanner() {
         const formData = new FormData();
         formData.append('image', imageFile);
 
-        const res = await fetch('http://localhost:5000/api/analyze-image', {
+        const res = await fetch('http://localhost:3001/api/analyze-image', {
            method: 'POST',
            body: formData
         });
@@ -72,7 +72,7 @@ export default function ThreatScanner() {
     } else {
       // Text Analysis
       try {
-        const res = await fetch('http://localhost:5000/api/analyze', {
+        const res = await fetch('http://localhost:3001/api/analyze', {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({ text: inputText })
@@ -339,7 +339,50 @@ export default function ThreatScanner() {
             </div>
 
             {/* OCR Extracted Text Panel */}
+            {/* CyberEDT DB Intelligence Badge */}
+            {result.threatIntel && (
+              <div className={`rounded-xl border p-4 ${result.threatIntel.dbMatched || result.threatIntel.patternsMatched > 0 ? 'bg-red-50 border-red-100' : 'bg-indigo-50 border-indigo-100'}`}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={result.threatIntel.dbMatched || result.threatIntel.patternsMatched > 0 ? 'text-red-600' : 'text-indigo-600'}><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider ${result.threatIntel.dbMatched || result.threatIntel.patternsMatched > 0 ? 'text-red-700' : 'text-indigo-700'}`}>
+                      CyberEDT Threat Intelligence
+                    </span>
+                  </div>
+                  <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase ${result.threatIntel.dbMatched || result.threatIntel.patternsMatched > 0 ? 'bg-red-200 text-red-800' : 'bg-indigo-200 text-indigo-800'}`}>
+                    {result.threatIntel.dbMatched || result.threatIntel.patternsMatched > 0 ? 'DB MATCH FOUND' : 'DB: CLEAN'}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px]">
+                  <div><span className="text-gray-500">Source: </span><span className="font-bold text-gray-800">{result.threatIntel.source}</span></div>
+                  {result.threatIntel.patternsMatched !== undefined && (
+                    <div><span className="text-gray-500">Patterns matched: </span><span className="font-bold text-gray-800">{result.threatIntel.patternsMatched}</span></div>
+                  )}
+                  {result.threatIntel.matchType && (
+                    <div><span className="text-gray-500">Match type: </span><span className="font-bold text-gray-800 capitalize">{result.threatIntel.matchType}</span></div>
+                  )}
+                  {result.threatIntel.threatCategory && (
+                    <div><span className="text-gray-500">Threat class: </span><span className="font-bold text-gray-800 capitalize">{result.threatIntel.threatCategory}</span></div>
+                  )}
+                  {result.threatIntel.spamSignal && (
+                    <div className="col-span-2"><span className="text-gray-500">Corpus verdict: </span>
+                      <span className={`font-bold capitalize ${result.threatIntel.spamSignal.verdict === 'spam' ? 'text-red-700' : 'text-green-700'}`}>
+                        {result.threatIntel.spamSignal.verdict} ({result.threatIntel.spamSignal.spamRatio}% spam ratio from 52,287 messages)
+                      </span>
+                    </div>
+                  )}
+                  {result.threatIntel.heuristicFlags?.length > 0 && (
+                    <div className="col-span-2 mt-1">
+                      <span className="text-gray-500">Heuristic flags: </span>
+                      <span className="font-bold text-gray-800">{result.threatIntel.heuristicFlags.join(' · ')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {result.extractedText && (
+
               <div>
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Vision OCR Extraction</h3>
                 <div className="bg-[#1E293B] border border-gray-700 rounded-xl p-4 overflow-hidden relative">

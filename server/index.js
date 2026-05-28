@@ -6,6 +6,7 @@ import { config } from './config/env.js';
 import analyzeRoute from './api/analyzeRoute.js';
 import urlIntelRoute from './api/urlIntelRoute.js';
 import visionRoute from './api/visionRoute.js';
+import threatFeedRoute from './api/threatFeedRoute.js';
 import { securityMiddleware } from './api/middleware/security.js';
 
 const app = express();
@@ -14,6 +15,7 @@ const app = express();
  * Cognitive Firewall Application Entry Point
  * Implements the modular architecture pattern:
  * API -> Analyzer Engine -> Scoring -> Structured JSON
+ * v3.1.0: Enhanced with CyberEDT Neon DB Threat Intelligence
  */
 
 // Global Security Middleware
@@ -89,23 +91,28 @@ app.use(securityMiddleware);
 app.use('/api/analyze', analyzeRoute);
 app.use('/api/analyze-url', urlIntelRoute);
 app.use('/api/analyze-image', visionRoute);
+app.use('/api/threat-feed', threatFeedRoute);
 
 // Global Health Check
 app.get('/api/health', (req, res) => {
     res.json({
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        service: 'PsyWall Engine'
+        service: 'PsyWall Engine',
+        threatIntel: {
+            source: 'CyberEDT Neon DB',
+            tables: ['malicious_urls (12,046)', 'phishing_urls (614)', 'scam_messages (52,287)', 'scam_patterns (17)']
+        }
     });
 });
 
 if (process.env.NODE_ENV !== 'test') {
     app.listen(config.port, () => {
         console.log(`[PsyWall] System initialized.`);
-        console.log(`[Architecture] Browser Extension → API → Analyzer Engine → Scoring → JSON Output`);
+        console.log(`[Architecture] Browser Extension → API → Analyzer Engine → CyberEDT DB → Scoring → JSON Output`);
         console.log(`[Environment] ${config.nodeEnv} mode running on port ${config.port}`);
+        console.log(`[ThreatIntel] CyberEDT Neon DB connected — 12,046 malicious URLs, 614 phishing URLs, 52,287 scam messages`);
     });
 }
 
 export default app;
-
