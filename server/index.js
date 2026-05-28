@@ -48,8 +48,9 @@ app.use(helmet({
 const allowedOrigins = [
     'http://localhost:3000',     // Local React frontend
     'http://localhost:5173',     // Vite default local server
-    'chrome-extension://*'       // Browser extension
-];
+    'chrome-extension://*',      // Browser extension
+    process.env.FRONTEND_URL     // Production frontend (e.g. from Vercel)
+].filter(Boolean);
 
 app.use(cors({
     origin: (origin, callback) => {
