@@ -11,8 +11,8 @@ const router = express.Router();
 router.post('/', analysisRateLimit, async (req, res) => {
     try {
         const { url } = req.body;
-        if (!url) {
-            return res.status(400).json({ error: "URL is required" });
+        if (!url || typeof url !== 'string') {
+            return res.status(400).json({ error: "URL is required and must be a valid string" });
         }
 
         // Run DB lookup + heuristic analysis in parallel

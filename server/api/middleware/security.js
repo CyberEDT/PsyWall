@@ -56,6 +56,33 @@ const hasCommandInjectionSignatures = (val) => {
 };
 
 /**
+ * Detects NoSQL Injection patterns (e.g., MongoDB operators).
+ */
+const hasNoSQLInjectionSignatures = (val) => {
+    if (typeof val !== 'string') return false;
+    const nosqlPatterns = [
+        /\$where/i,
+        /\$ne/i,
+        /\$gt/i,
+        /\$lt/i,
+        /\$regex/i
+    ];
+    return nosqlPatterns.some(pattern => pattern.test(val));
+};
+
+/**
+ * Detects Directory Traversal (LFI/RFI) patterns.
+ */
+const hasDirectoryTraversalSignatures = (val) => {
+    if (typeof val !== 'string') return false;
+    const traversalPatterns = [
+        /\.\.\//,
+        /\.\.\\/
+    ];
+    return traversalPatterns.some(pattern => pattern.test(val));
+};
+
+/**
  * Middleware function that intercepts requests and scans for malicious payloads.
  */
 export const securityMiddleware = (req, res, next) => {
@@ -105,6 +132,20 @@ export const securityMiddleware = (req, res, next) => {
                 status: "error",
                 code: "SECURITY_VIOLATION",
                 message: `Malformed request parameter detected (Potential Command Injection in field: ${key}).`
+            });
+        }
+        if (hasNoSQLInjectionSignatures(stringVal)) {
+            return res.status(400).json({
+                status: "error",
+                code: "SECURITY_VIOLATION",
+                message: `Malformed request parameter detected (Potential NoSQL Injection in field: ${key}).`
+            });
+        }
+        if (hasDirectoryTraversalSignatures(stringVal)) {
+            return res.status(400).json({
+                status: "error",
+                code: "SECURITY_VIOLATION",
+                message: `Malformed request parameter detected (Potential Directory Traversal in field: ${key}).`
             });
         }
     }
