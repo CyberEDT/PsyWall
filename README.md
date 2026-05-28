@@ -1,213 +1,91 @@
 # 🧠 PsyWall (MIDS)
-A Cognitive Firewall for Human-Centric Security
+**A Cognitive Firewall for Human-Centric Security**
 
-PsyWall is an advanced cybersecurity intelligence system designed to detect psychological manipulation techniques used in scams, phishing, and social engineering attacks.
+PsyWall has evolved from a standard phishing scanner into an **Enterprise-Grade Psychological Threat Intelligence Platform and Learning Academy**. 
 
-Unlike traditional scanners that only analyze links or malware, PsyWall focuses on the human attack surface — identifying fear tactics, urgency triggers, authority abuse, emotional manipulation, and deception patterns used by attackers.
+Unlike traditional scanners that only analyze links or malware payloads, PsyWall focuses on the human attack surface — identifying fear tactics, urgency triggers, authority abuse, emotional manipulation, and deception patterns used by attackers.
 
-The tool helps users recognize psychological warfare used in cybercrime and provides risk scoring, analysis, and defense guidance.
+---
 
-🚀 Core Purpose
+## 🚀 Core Features (Phases 1-6 Implementation)
 
-Cyber attacks today rely heavily on human psychology rather than technical exploits.
+### 1. Enterprise SOC Command Center
+A futuristic, 3-pane global architecture designed to match modern Security Operations Centers (SOC):
+- **Left Navigation**: Access to Dashboards, Scanners, Intelligence Hubs, and Academy.
+- **Center Active Workspace**: Primary threat analysis and configuration.
+- **Contextual Intelligence Sidebar**: A hardwired, real-time global threat feed displaying active psychological attack vectors.
 
-PsyWall analyzes messages, emails, texts, or social engineering attempts to detect:
+### 2. Multi-Modal Intelligence Scanner
+PsyWall now analyzes multiple input vectors with a privacy-first approach:
+- **Text Analysis**: Paste suspicious emails or SMS messages for deep cognitive parsing.
+- **URL Intelligence Engine**: Extracts and proxies target web pages to determine manipulative content on the site itself.
+- **Vision OCR Privacy Engine**: Client-side optical character recognition to extract text from suspicious screenshots without uploading images to a server.
 
-Psychological manipulation
+### 3. Threat DNA Engine™ & Behavioral Fingerprinting
+- Generates **Unique Behavioral Hashes** based on psychological triggers rather than purely technical signatures.
+- **Threat Family Clustering**: A similarity engine that correlates active scans to known attack campaigns (e.g., "Urgency-Authority Clusters").
 
-Scam persuasion techniques
+### 4. Interactive Manipulation Intelligence Hub
+An interactive cyber-psychology encyclopedia replacing static cards.
+- **Interactive Threat Nodes & Dynamic Radar**: Explore the interconnected web of manipulation tactics.
+- **Immersive Intelligence Modal**: Click any node to receive AI explainability, visual red flags, and defensive countermeasures.
 
-Emotional exploitation
+### 5. Enterprise SOC Configuration Hub
+A robust, vertical tabbed configuration architecture.
+- **Interactive State Controls**: Adjust threat sensitivity via sliders.
+- **Mock Integrations**: API Key generation and SIEM Webhook integration mocks to simulate enterprise deployment capabilities.
+- **Privacy & Compliance**: Manage local-first analysis capabilities and storage consent.
 
-Social engineering patterns
+### 6. Human Psychology Academy (The "Human Firewall")
+A fully functional Learning Management System (LMS) built into the platform.
+- **10-Module Reading Curriculum**: Based on the *Cybersecurity & Behavioral Analysis Division's* official knowledge base.
+- **Interactive Knowledge Checks**: End-of-module quizzes that gate progression. Users must pass the knowledge check to mark the course as complete.
+- **Topics Covered**: Cognitive Biases, OSINT Psychology, Deepfakes, Business Email Compromise (BEC), and Insider Threat Psychology.
 
-The goal is to help users identify manipulation before they fall victim to fraud.
+---
 
-🔍 Key Features
-🧠 Psychological Manipulation Detection
+## 🔐 Privacy-First Architecture
 
-Detects persuasion techniques used by scammers including:
+PsyWall is designed with strict privacy protection:
+- **No Persistent Storage**: Input data is analyzed in-memory and discarded.
+- **Client-Side OCR**: Images are processed locally in your browser.
+- **No Tracking**: No profiling or personal data collection.
 
-Urgency pressure
+---
 
-Fear tactics
+## 🛠 Tech Stack
 
-Authority impersonation
+PsyWall is built on a modern, high-performance web stack:
+- **Frontend**: React, TailwindCSS, Vite
+- **UI Components**: Lucide-React Icons, Recharts for dynamic radars, Framer Motion (animations)
+- **Backend/API**: Node.js / Express (Proxy & Threat Engines)
+- **Storage**: LocalStorage (Privacy-first client-side state)
 
-Scarcity manipulation
+---
 
-Emotional exploitation
-
-Financial coercion
-
-🧬 Social Engineering Pattern Analysis
-
-PsyWall analyzes communication patterns commonly used in attacks such as:
-
-Fake bank alerts
-
-Government impersonation
-
-Tech support scams
-
-Romance scams
-
-Job offer scams
-
-Crypto investment scams
-
-⚠ Risk Scoring System
-
-Each analyzed message receives a risk level classification:
-
-Risk Level	Meaning
-Safe	No suspicious manipulation
-Low Risk	Minor persuasion patterns
-Medium Risk	Possible social engineering
-High Risk	Strong scam indicators
-Critical	Highly likely scam attempt
-🛡 Defense Guidance
-
-When threats are detected PsyWall provides:
-
-Explanation of manipulation technique
-
-Recommended response
-
-Preventive security advice
-
-🔎 Educational Intelligence Layer
-
-PsyWall also teaches users:
-
-How scammers manipulate victims
-
-Psychological triggers used in fraud
-
-How to resist social engineering attacks
-
-This transforms PsyWall into both a detection tool and an awareness system.
-
-🏗 System Architecture
-
-PsyWall operates using multiple analysis layers:
-
-User Input
-   │
-   ▼
-Text Analysis Engine
-   │
-   ├── Manipulation Pattern Detector
-   ├── Social Engineering Classifier
-   ├── Risk Scoring Engine
-   └── Threat Intelligence Layer
-   │
-   ▼
-Threat Report Generator
-🔐 Privacy First Design
-
-PsyWall is designed with strict privacy protection.
-
-Input data is not stored
-
-No personal information is collected
-
-Analysis can run locally or securely processed
-
-No tracking or profiling
-
-📊 Example Analysis
-
-Input message:
-
-URGENT: Your bank account will be locked within 2 hours.
-Click here immediately to verify your identity.
-
-PsyWall detects:
-
-Urgency pressure
-
-Authority impersonation
-
-Fear manipulation
-
-Output:
-
-Risk Level: HIGH
-Detected Tactics:
-- Urgency manipulation
-- Authority impersonation
-- Fear exploitation
-🎯 Use Cases
+## 🎯 Use Cases
 
 PsyWall can be used by:
+- **Individuals**: To detect scams in messages, emails, texts, and websites.
+- **Cybersecurity Students**: To learn social engineering techniques used by attackers through the integrated Academy.
+- **Security Researchers**: To analyze scam patterns and persuasion techniques using the Threat DNA Engine.
+- **Enterprise Awareness Programs**: To educate users about psychological manipulation in cybercrime and build a genuine "Human Firewall."
 
-Individuals
+---
 
-To detect scams in messages, emails, and texts.
+## 🌐 Part of the CyberEDT Ecosystem
 
-Cybersecurity Students
+PsyWall is part of the CyberEDT cybersecurity tool ecosystem, focused on creating practical security utilities for learners and professionals. CyberEDT aims to build a modular cybersecurity platform with real-world defensive tools.
 
-To learn social engineering techniques used by attackers.
+---
 
-Security Researchers
-
-To analyze scam patterns and persuasion techniques.
-
-Awareness Programs
-
-To educate users about psychological manipulation in cybercrime.
-
-🧩 Future Features
-
-Planned improvements include:
-
-AI-based scam language detection
-
-Scam dataset training
-
-Multi-language scam detection
-
-Voice scam detection
-
-Real-time chat monitoring
-
-Integration with threat intelligence feeds
-
-🛠 Tech Stack
-
-PsyWall can be implemented using:
-
-JavaScript / Python
-
-NLP analysis engines
-
-Pattern recognition models
-
-Threat intelligence datasets
-
-Frontend may include:
-
-React
-
-TailwindCSS
-
-Vite
-
-🌐 Part of CyberEDT Ecosystem
-
-PsyWall is part of the CyberEDT cybersecurity tool ecosystem, focused on creating practical security utilities for learners and professionals.
-
-CyberEDT aims to build a modular cybersecurity platform with real-world defensive tools.
-
-📜 License
+## 📜 License
 
 This project is released for educational and research purposes.
 Use responsibly and ethically.
 
 ## 👨‍💻 Author
 
-Nitesh Yadav
-Cybersecurity | Cloud Security | Security Research
-
+**Nitesh Yadav**  
+Cybersecurity | Cloud Security | Security Research  
 Founder — CyberEDT
