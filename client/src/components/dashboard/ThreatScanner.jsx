@@ -370,7 +370,30 @@ export default function ThreatScanner() {
                      <span className="text-[10px] uppercase text-gray-400 font-bold block mb-1">SSL Status</span>
                      <span className={`text-sm font-bold ${result.urlIntel.sslStatus.includes('Invalid') ? 'text-red-600' : 'text-gray-900'}`}>{result.urlIntel.sslStatus}</span>
                    </div>
-                </div>
+                 </div>
+                 
+                 {result.urlIntel.liveDomAnalysis && (
+                   <div className="mt-4 p-4 bg-indigo-50/50 border border-indigo-100 rounded-lg">
+                     <div className="flex items-center justify-between mb-3">
+                       <span className="text-[10px] uppercase text-indigo-500 font-bold flex items-center gap-1.5"><ImageIcon size={12}/> Live DOM Rendering</span>
+                       <span className="text-[9px] uppercase font-bold px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full">{result.urlIntel.liveDomAnalysis.status}</span>
+                     </div>
+                     <div className="grid grid-cols-3 gap-2">
+                       <div>
+                         <span className="text-[9px] text-gray-500 uppercase font-bold block mb-0.5">Brand Similarity</span>
+                         <span className="text-xs font-bold text-red-600">{result.urlIntel.liveDomAnalysis.brandSimilarity}</span>
+                       </div>
+                       <div>
+                         <span className="text-[9px] text-gray-500 uppercase font-bold block mb-0.5">Hidden Iframes</span>
+                         <span className="text-xs font-bold text-gray-900">{result.urlIntel.liveDomAnalysis.hiddenIframes}</span>
+                       </div>
+                       <div>
+                         <span className="text-[9px] text-gray-500 uppercase font-bold block mb-0.5">Credential Forms</span>
+                         <span className="text-xs font-bold text-gray-900">{result.urlIntel.liveDomAnalysis.credentialForms}</span>
+                       </div>
+                     </div>
+                   </div>
+                 )}
                 <div className="mt-4 p-4 bg-gray-50 border border-gray-100 rounded-lg">
                    <span className="text-[10px] uppercase text-gray-400 font-bold block mb-2">Redirect Chain Detected</span>
                    <div className="flex items-center gap-2 text-xs font-mono">
