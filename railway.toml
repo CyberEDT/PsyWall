@@ -1,0 +1,14 @@
+[build]
+builder = "NIXPACKS"
+watch = ["server/**"]
+
+[deploy]
+startCommand = "cd server && npm start"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
+
+[phases.setup]
+nixPkgs = ["nodejs"]
+
+[phases.install]
+cmds = ["cd server && npm install"]
