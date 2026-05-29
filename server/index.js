@@ -107,6 +107,20 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+// Root Route for browser verification
+app.get('/', (req, res) => {
+    res.status(200).send(`
+        <html>
+            <body style="font-family: monospace; background: #0f172a; color: #10b981; padding: 2rem;">
+                <h2>PsyWall Cognitive Firewall API — ONLINE</h2>
+                <p>Status: All systems operational.</p>
+                <p>This is the backend API server. It is not meant to be viewed in a browser.</p>
+                <p>Please connect your Vercel frontend to this URL.</p>
+            </body>
+        </html>
+    `);
+});
+
 if (process.env.NODE_ENV !== 'test') {
     app.listen(config.port, () => {
         console.log(`[PsyWall] System initialized.`);
