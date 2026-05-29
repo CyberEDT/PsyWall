@@ -30,9 +30,10 @@ export default function Overview() {
     setDbLoading(true);
     setDbError(false);
     try {
+      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       const [statsRes, feedRes] = await Promise.all([
-        fetch('http://localhost:3001/api/threat-feed/stats'),
-        fetch('http://localhost:3001/api/threat-feed?limit=12'),
+        fetch(`${API_BASE}/api/threat-feed/stats`),
+        fetch(`${API_BASE}/api/threat-feed?limit=12`),
       ]);
       const stats = await statsRes.json();
       const feed  = await feedRes.json();

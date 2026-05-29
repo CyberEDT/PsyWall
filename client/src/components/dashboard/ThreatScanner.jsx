@@ -38,7 +38,8 @@ export default function ThreatScanner() {
 
     if (scanMode === 'url') {
       try {
-        const res = await fetch('http://localhost:3001/api/analyze-url', {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+        const res = await fetch(`${API_BASE}/api/analyze-url`, {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({ url: urlInput })
@@ -56,7 +57,8 @@ export default function ThreatScanner() {
         const formData = new FormData();
         formData.append('image', imageFile);
 
-        const res = await fetch('http://localhost:3001/api/analyze-image', {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+        const res = await fetch(`${API_BASE}/api/analyze-image`, {
            method: 'POST',
            body: formData
         });
@@ -72,7 +74,8 @@ export default function ThreatScanner() {
     } else {
       // Text Analysis
       try {
-        const res = await fetch('http://localhost:3001/api/analyze', {
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+        const res = await fetch(`${API_BASE}/api/analyze`, {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify({ text: inputText })
