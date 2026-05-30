@@ -314,7 +314,8 @@ export default function ThreatScanner() {
                     onClick={() => {
                       reportThreat({
                         type: 'danger',
-                        label: scanMode === 'text' ? inputText : scanMode === 'url' ? urlInput : imageFile?.name || 'Uploaded Screenshot',
+                        label: result.alertPayload?.title || 'Community Reported Threat',
+                        payload_data: scanMode === 'text' ? inputText : scanMode === 'url' ? urlInput : imageFile?.name || 'Uploaded Screenshot',
                         channel: scanMode === 'text' ? 'Scanner' : scanMode === 'url' ? 'URL Intel' : 'Vision AI',
                         contact: 'Anonymous User',
                         risk: result.riskAnalysis?.score,

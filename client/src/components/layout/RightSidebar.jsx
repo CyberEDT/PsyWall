@@ -205,7 +205,7 @@ export default function RightSidebar() {
                    </div>
                     <div>
                       <h3 className="text-base font-bold text-gray-900 leading-tight">
-                        Investigation: {selectedThreat.label.length > 60 ? selectedThreat.label.substring(0, 60) + '...' : selectedThreat.label}
+                        Investigation: {selectedThreat.label}
                       </h3>
                       <p className="text-xs text-gray-500">Reported by {selectedThreat.contact}</p>
                     </div>
@@ -265,9 +265,9 @@ export default function RightSidebar() {
                       <AlertTriangle className="mx-auto mb-2 text-red-400" size={32} />
                       <p className="font-bold">Database Record Unavailable</p>
                       <p className="text-xs text-red-400 mt-1">The raw payload could not be fetched from the Central Database.</p>
-                      <div className="mt-6 text-left p-4 bg-white rounded border border-red-100 mx-4">
+                      <div className="mt-6 text-left p-4 bg-white rounded border border-red-100 mx-4 max-h-48 overflow-y-auto">
                         <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-2">Available Intelligence Context:</p>
-                        <p className="text-sm font-mono text-gray-800 font-bold mb-1">{selectedThreat.label}</p>
+                        <p className="text-sm font-mono text-gray-800 font-bold mb-3 break-all whitespace-pre-wrap">{selectedThreat.payload_data || selectedThreat.label}</p>
                         <p className="text-xs text-gray-500">Reported via: {selectedThreat.channel}</p>
                         <p className="text-xs text-gray-500">Target Type: {selectedThreat.type}</p>
                       </div>

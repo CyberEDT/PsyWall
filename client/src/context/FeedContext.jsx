@@ -101,6 +101,7 @@ export const FeedProvider = ({ children }) => {
       id: `local-${Date.now()}`,
       type: threat.type || 'danger',
       label: threat.label || 'Community Reported Threat',
+      payload_data: threat.payload_data || threat.label || '',
       channel: 'Scanner',
       contact: user?.email?.split('@')[0] || 'Local Analyst',
       timestamp: Date.now(),
