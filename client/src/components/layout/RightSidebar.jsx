@@ -203,10 +203,12 @@ export default function RightSidebar() {
                    <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
                      <Search size={16} className="text-indigo-600" />
                    </div>
-                   <div>
-                     <h3 className="text-base font-bold text-gray-900 leading-tight">Investigation: {selectedThreat.label}</h3>
-                     <p className="text-xs text-gray-500">Reported by {selectedThreat.contact}</p>
-                   </div>
+                    <div>
+                      <h3 className="text-base font-bold text-gray-900 leading-tight">
+                        Investigation: {selectedThreat.label.length > 60 ? selectedThreat.label.substring(0, 60) + '...' : selectedThreat.label}
+                      </h3>
+                      <p className="text-xs text-gray-500">Reported by {selectedThreat.contact}</p>
+                    </div>
                  </div>
                  <button onClick={() => setSelectedThreat(null)} className="text-gray-400 hover:text-gray-600 p-1"><X size={20} /></button>
                </div>
