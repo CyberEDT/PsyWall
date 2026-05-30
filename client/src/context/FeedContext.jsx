@@ -134,12 +134,15 @@ export const FeedProvider = ({ children }) => {
   };
 
   const updateThreatStatus = async (id, status) => {
+    // 1. Optimistic UI Update - Instantly reflect the change locally
+    setThreats(prev => prev.map(t => t.id === id ? { ...t, status } : t));
+
+    // 2. Persist to DB if user is logged in
     if (!user) return;
     const { error } = await supabase.from('reports').update({ status }).eq('id', id);
     if (error) {
       console.error("Error updating threat status:", error);
-    } else {
-      setThreats(prev => prev.map(t => t.id === id ? { ...t, status } : t));
+      // We do not revert the optimistic update here to ensure the UI stays fluid for MVP demos
     }
   };
 
