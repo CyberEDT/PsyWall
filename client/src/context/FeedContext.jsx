@@ -96,9 +96,25 @@ export const FeedProvider = ({ children }) => {
   }, []);
 
   const reportThreat = async (threat) => {
-    if (!user) return;
+    // 1. Optimistic UI Update - Instantly show the threat on the dashboard feed
+    const optimisticThreat = {
+      id: `local-${Date.now()}`,
+      type: threat.type || 'danger',
+      label: threat.label || 'Community Reported Threat',
+      channel: 'Scanner',
+      contact: user?.email?.split('@')[0] || 'Local Analyst',
+      timestamp: Date.now(),
+      risk: threat.risk || 0,
+      tactics: 0,
+      status: 'pending',
+      scan_id: threat.scan_id || null
+    };
     
-    // Insert into Supabase
+    setThreats(prev => [optimisticThreat, ...prev].slice(0, 50));
+
+    // 2. Persist to DB if user is logged in
+    if (!user) return; 
+    
     const { data, error } = await supabase
       .from('reports')
       .insert([
