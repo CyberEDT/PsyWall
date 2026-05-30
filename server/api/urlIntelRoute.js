@@ -22,6 +22,12 @@ router.post('/', analysisRateLimit, async (req, res) => {
         ]);
 
         const lowerUrl = url.toLowerCase();
+        let domainName = '';
+        try {
+            domainName = new URL(lowerUrl.startsWith('http') ? lowerUrl : `http://${lowerUrl}`).hostname;
+        } catch {
+            domainName = lowerUrl;
+        }
 
         // Heuristic signals
         const hasLoginKeyword  = /login|signin|logon|account/.test(lowerUrl);
@@ -32,6 +38,25 @@ router.post('/', analysisRateLimit, async (req, res) => {
         const hasUrlShortener  = /bit\.ly|tinyurl|t\.co|goo\.gl|ow\.ly|shorten\.tv/.test(lowerUrl);
         const hasAtSymbol      = lowerUrl.includes('@');
         const hasDoubleSlash   = lowerUrl.replace('https://', '').replace('http://', '').includes('//');
+
+        // Advanced Typosquatting Detection for Top Brands
+        const targetedBrands = ['paypal', 'netflix', 'amazon', 'apple', 'microsoft', 'google', 'chase', 'wells', 'bank'];
+        let typosquatBrand = null;
+        for (const brand of targetedBrands) {
+            const regexStr = brand.split('').map(char => {
+                if (char === 'a') return '[a4@]';
+                if (char === 'e') return '[e3]';
+                if (char === 'i' || char === 'l') return '[il1|]';
+                if (char === 'o') return '[o0]';
+                return char;
+            }).join('');
+            const regex = new RegExp(regexStr);
+            if (regex.test(domainName) && !domainName.includes(brand)) {
+                typosquatBrand = brand;
+                break;
+            }
+        }
+        const hasTyposquatting = typosquatBrand !== null;
 
         // Heuristic score calculation
         let heuristicScore = 0;
@@ -48,6 +73,7 @@ router.post('/', analysisRateLimit, async (req, res) => {
         if (hasUrlShortener)  { heuristicScore += 25; heuristicFlags.push('URL shortener detected (hides destination)'); }
         if (hasAtSymbol)      { heuristicScore += 20; heuristicFlags.push('@ symbol in URL (credential redirection trick)'); }
         if (hasDoubleSlash)   { heuristicScore += 15; heuristicFlags.push('Double slash injection pattern'); }
+        if (hasTyposquatting) { heuristicScore += 45; heuristicFlags.push(`Typosquatting: Looks like fake '${typosquatBrand}' domain`); }
 
         const score = Math.min(heuristicScore, 99);
         const isSuspicious = score > 30;
@@ -116,12 +142,15 @@ router.post('/', analysisRateLimit, async (req, res) => {
                     evidence: [{ context: url }]
                 });
             }
-            if (hasDashes || hasNewTLD) {
+            if (hasDashes || hasNewTLD || hasTyposquatting) {
                 detections.push({
-                    displayLabel: 'Typosquatting / Lookalike Domain',
-                    confidencePercent: 70,
-                    description: 'Domain structure suggests impersonation of a legitimate brand via hyphen injection or high-risk TLDs commonly used for fraud.',
-                    evidence: [{ context: url }]
+                    displayLabel: hasTyposquatting ? 'Brand Impersonation / Typosquatting' : 'Lookalike Domain Pattern',
+                    confidencePercent: hasTyposquatting ? 92 : 70,
+                    _isAdvanced: hasTyposquatting,
+                    description: hasTyposquatting 
+                        ? `This domain appears to be intentionally misspelling the brand '${typosquatBrand}' to deceive users.` 
+                        : 'Domain structure suggests impersonation of a legitimate brand via hyphen injection or high-risk TLDs commonly used for fraud.',
+                    evidence: [{ context: domainName }]
                 });
             }
         }
