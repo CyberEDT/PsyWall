@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } from 'recharts';
-import { ShieldCheck, AlertTriangle, Info, Clock, CheckCircle, ShieldAlert, X, Search, Filter } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, Info, Clock, CheckCircle, ShieldAlert, X, Search, Filter, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useFeed } from '../../context/FeedContext';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
@@ -25,7 +25,7 @@ const formatTimeAgo = (timestamp) => {
   return `${Math.floor(hours / 24)}d ago`;
 };
 
-export default function RightSidebar() {
+export default function RightSidebar({ isOpen = true, setIsOpen }) {
   const { threats, updateThreatStatus } = useFeed();
   const { profile } = useAuth();
   
@@ -54,19 +54,24 @@ export default function RightSidebar() {
   }, [selectedThreat]);
 
   useEffect(() => {
+    let mockInterval;
     const fetchScans = async () => {
       const { data, error } = await supabase.from('scans').select('payload').order('created_at', { ascending: false }).limit(50);
       
-      // If DB fails or is empty, use realistic mock data to keep the UI feeling alive for local MVP mode
+      // If DB fails or is empty, use dynamic mock data to keep the UI feeling alive
       if (error || !data || data.length === 0) {
-        setRadarData([
-          { subject: 'Urgency', value: 85 },
-          { subject: 'Fear', value: 65 },
-          { subject: 'Authority', value: 90 },
-          { subject: 'Emotional', value: 45 },
-          { subject: 'Financial', value: 75 },
-          { subject: 'Scarcity', value: 55 },
-        ]);
+        const updateMockRadar = () => {
+          setRadarData([
+            { subject: 'Urgency', value: 65 + Math.random() * 20 },
+            { subject: 'Fear', value: 50 + Math.random() * 25 },
+            { subject: 'Authority', value: 75 + Math.random() * 20 },
+            { subject: 'Emotional', value: 45 + Math.random() * 25 },
+            { subject: 'Financial', value: 60 + Math.random() * 25 },
+            { subject: 'Scarcity', value: 55 + Math.random() * 20 },
+          ]);
+        };
+        updateMockRadar();
+        mockInterval = setInterval(updateMockRadar, 3500); // Shift radar subtly every 3.5 seconds
         return;
       }
 
@@ -91,15 +96,62 @@ export default function RightSidebar() {
       }
     };
     fetchScans();
+    
+    return () => {
+      if (mockInterval) clearInterval(mockInterval);
+    };
   }, []);
 
+  if (!isOpen) {
+    return (
+      <div className="w-full h-full flex flex-col items-center py-4 bg-white">
+        <button 
+          onClick={() => setIsOpen(true)}
+          className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors mb-8"
+          title="Open Contextual Intelligence"
+        >
+          <ChevronLeft size={20} />
+        </button>
+        
+        <div className="flex flex-col items-center gap-8">
+           <div className="relative group cursor-pointer" onClick={() => setIsOpen(true)}>
+             <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+             <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 w-max px-2 py-1 bg-slate-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+               Live Threats Active
+               <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
+             </div>
+           </div>
+           
+           <div className="w-8 h-[1px] bg-slate-100"></div>
+           
+           <div className="relative group cursor-pointer" onClick={() => setIsOpen(true)}>
+             <ShieldAlert size={20} className="text-indigo-400 group-hover:text-indigo-600 transition-colors" />
+             <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 w-max px-2 py-1 bg-slate-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+               Contextual Intelligence
+               <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
+             </div>
+           </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="w-[320px] bg-white border-l border-gray-200 flex flex-col h-screen sticky top-0 shrink-0 shadow-[-4px_0_15px_rgba(0,0,0,0.02)]">
+    <div className="w-full bg-white flex flex-col h-full sticky top-0 shrink-0 shadow-[-4px_0_15px_rgba(0,0,0,0.02)] overflow-hidden">
        <div className="p-5 border-b border-gray-100 shrink-0 flex items-center justify-between">
          <div>
            <h3 className="text-sm font-bold text-gray-900">Contextual Intelligence</h3>
            <p className="text-[10px] text-indigo-500 font-bold uppercase tracking-widest mt-1">PsyWall Radar Active</p>
          </div>
+         {setIsOpen && (
+           <button 
+             onClick={() => setIsOpen(false)} 
+             className="text-slate-400 hover:text-slate-600 transition-colors p-1.5 rounded-lg hover:bg-slate-50"
+             title="Collapse Sidebar"
+           >
+             <ChevronRight size={18} />
+           </button>
+         )}
        </div>
        
        <div className="flex-1 overflow-y-auto overflow-x-hidden p-5 flex flex-col gap-6">

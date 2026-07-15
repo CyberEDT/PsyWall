@@ -46,6 +46,8 @@ function extractDomain(rawUrl) {
  * Returns a structured threat result or null if clean.
  */
 export async function checkUrlAgainstThreatDB(inputUrl) {
+    if (!inputUrl || typeof inputUrl !== 'string') return { matched: false, riskBoost: 0 };
+    
     const cacheKey = `url:${inputUrl}`;
     const cached = fromCache(cacheKey);
     if (cached !== null) return cached;
@@ -56,7 +58,7 @@ export async function checkUrlAgainstThreatDB(inputUrl) {
     try {
         // 1. Exact match in malicious_urls
         const exactMalicious = await sql`
-            SELECT url, malware_type, source FROM malicious_urls
+            SELECT url, malware_type, source FROM cyberedt_all.malicious_urls
             WHERE LOWER(url) = ${normalizedInput}
             LIMIT 1
         `;
@@ -77,7 +79,7 @@ export async function checkUrlAgainstThreatDB(inputUrl) {
 
         // 2. Exact match in phishing_urls
         const exactPhishing = await sql`
-            SELECT url, source FROM phishing_urls
+            SELECT url, source FROM cyberedt_all.phishing_urls
             WHERE LOWER(url) = ${normalizedInput}
             LIMIT 1
         `;
@@ -97,7 +99,7 @@ export async function checkUrlAgainstThreatDB(inputUrl) {
 
         // 3. Domain match in malicious_urls
         const domainMalicious = await sql`
-            SELECT url, malware_type, source FROM malicious_urls
+            SELECT url, malware_type, source FROM cyberedt_all.malicious_urls
             WHERE LOWER(url) LIKE ${'%' + domain + '%'}
             LIMIT 3
         `;
@@ -118,7 +120,7 @@ export async function checkUrlAgainstThreatDB(inputUrl) {
 
         // 4. Domain match in phishing_urls
         const domainPhishing = await sql`
-            SELECT url, source FROM phishing_urls
+            SELECT url, source FROM cyberedt_all.phishing_urls
             WHERE LOWER(url) LIKE ${'%' + domain + '%'}
             LIMIT 3
         `;
@@ -155,6 +157,10 @@ export async function checkUrlAgainstThreatDB(inputUrl) {
  * Returns matched patterns, accumulated risk score, and spam/ham signal.
  */
 export async function checkTextAgainstThreatDB(inputText) {
+    if (!inputText || typeof inputText !== 'string') {
+        return { hasThreats: false, matchedPatterns: [], patternRiskAccumulated: 0, spamSignal: null, detections: [] };
+    }
+    
     const cacheKey = `text:${inputText.substring(0, 120)}`;
     const cached = fromCache(cacheKey);
     if (cached !== null) return cached;
@@ -166,7 +172,7 @@ export async function checkTextAgainstThreatDB(inputText) {
         let patterns = fromCache('__all_scam_patterns__');
         if (!patterns) {
             patterns = await sql`
-                SELECT category, pattern, risk_score FROM scam_patterns
+                SELECT category, pattern, risk_score FROM cyberedt_all.scam_patterns
                 ORDER BY risk_score DESC
             `;
             toCache('__all_scam_patterns__', patterns);
@@ -197,7 +203,7 @@ export async function checkTextAgainstThreatDB(inputText) {
             const word3 = words[2] || words[0];
 
             const similarMessages = await sql`
-                SELECT label, COUNT(*) as cnt FROM scam_messages
+                SELECT label, COUNT(*) as cnt FROM cyberedt_all.scam_messages
                 WHERE LOWER(message) LIKE ${'%' + word1 + '%'}
                    OR LOWER(message) LIKE ${'%' + word2 + '%'}
                    OR LOWER(message) LIKE ${'%' + word3 + '%'}
@@ -269,7 +275,7 @@ export async function getRecentThreats(limit = 20) {
         const malicious = await sql`
             SELECT id, url, malware_type AS threat_type, source, created_at,
                    'malware' AS category
-            FROM malicious_urls
+            FROM cyberedt_all.malicious_urls
             ORDER BY created_at DESC
             LIMIT ${limit / 2}
         `;
@@ -277,7 +283,7 @@ export async function getRecentThreats(limit = 20) {
         const phishing = await sql`
             SELECT id, url, 'Phishing' AS threat_type, source, created_at,
                    'phishing' AS category
-            FROM phishing_urls
+            FROM cyberedt_all.phishing_urls
             ORDER BY created_at DESC
             LIMIT ${limit / 2}
         `;
@@ -286,6 +292,12 @@ export async function getRecentThreats(limit = 20) {
         const combined = [...malicious, ...phishing]
             .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
             .slice(0, limit);
+
+        // Shuffle visually for a better live feed feel (mixes batch-imported threats)
+        for (let i = combined.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [combined[i], combined[j]] = [combined[j], combined[i]];
+        }
 
         return toCache(cacheKey, combined);
     } catch (err) {
@@ -304,10 +316,10 @@ export async function getThreatStats() {
     if (cached !== null) return cached;
 
     try {
-        const [muCount] = await sql`SELECT COUNT(*) AS cnt FROM malicious_urls`;
-        const [puCount] = await sql`SELECT COUNT(*) AS cnt FROM phishing_urls`;
-        const [smSpam]  = await sql`SELECT COUNT(*) AS cnt FROM scam_messages WHERE label = 'spam'`;
-        const [spCount] = await sql`SELECT COUNT(*) AS cnt FROM scam_patterns`;
+        const [muCount] = await sql`SELECT COUNT(*) AS cnt FROM cyberedt_all.malicious_urls`;
+        const [puCount] = await sql`SELECT COUNT(*) AS cnt FROM cyberedt_all.phishing_urls`;
+        const [smSpam]  = await sql`SELECT COUNT(*) AS cnt FROM cyberedt_all.scam_messages WHERE label = 'spam'`;
+        const [spCount] = await sql`SELECT COUNT(*) AS cnt FROM cyberedt_all.scam_patterns`;
 
         const stats = {
             maliciousUrls:   parseInt(muCount.cnt),

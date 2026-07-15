@@ -59,19 +59,22 @@ app.use(cors({
             return callback(null, true);
         }
         
+        const normalizedOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin;
         const isAllowed = allowedOrigins.some(allowed => {
             if (allowed.includes('*')) {
                 // simple wildcard match for extensions
                 const regex = new RegExp('^' + allowed.replace(/\*/g, '.*') + '$');
-                return regex.test(origin);
+                return regex.test(normalizedOrigin);
             }
-            return allowed === origin;
+            return allowed === normalizedOrigin;
         });
 
         if (isAllowed) {
             callback(null, true);
         } else {
-            callback(new Error('Blocked by CORS policy (PsyWall Security)'));
+            // Log it but do not throw an Error, so Express handles it gracefully without a 500 crash
+            console.warn(`[CORS Blocked] Origin: ${origin}`);
+            callback(null, false);
         }
     },
     methods: ['GET', 'POST'],
@@ -84,6 +87,18 @@ app.use(hpp());
 
 // 4. Rate-limit and size-limit parsing of request body to block huge buffer-exhaustion injection attacks
 app.use(express.json({ limit: '100kb' }));
+
+// 4.5. JSON Parsing Error Handler (Prevent body-parser crashes)
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        console.error(`[PsyWall Security] Blocked malformed JSON request from ${req.ip}`);
+        return res.status(400).json({ 
+            success: false, 
+            error: 'Malformed JSON payload detected. Request blocked.' 
+        });
+    }
+    next(err);
+});
 
 // 5. Custom Injection Protection Middleware (SQLi, CMDi, Prototype Pollution)
 app.use(securityMiddleware);
@@ -119,6 +134,15 @@ app.get('/', (req, res) => {
             </body>
         </html>
     `);
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error(`[Global Error] ${err.message}`);
+    res.status(500).json({
+        success: false,
+        error: 'An internal server error occurred.'
+    });
 });
 
 if (process.env.NODE_ENV !== 'test') {

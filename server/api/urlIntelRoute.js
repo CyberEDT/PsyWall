@@ -34,7 +34,7 @@ router.post('/', analysisRateLimit, async (req, res) => {
         const hasSecureKeyword = /secure|verify|confirm|update|validate/.test(lowerUrl);
         const hasNewTLD        = /\.xyz|\.tk|\.ml|\.ga|\.cf|\.gq/.test(lowerUrl);
         const hasDashes        = (lowerUrl.match(/-/g) || []).length >= 2;
-        const hasIPAddress     = /https?:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(lowerUrl);
+        const hasIPAddress     = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/.test(lowerUrl);
         const hasUrlShortener  = /bit\.ly|tinyurl|t\.co|goo\.gl|ow\.ly|shorten\.tv/.test(lowerUrl);
         const hasAtSymbol      = lowerUrl.includes('@');
         const hasDoubleSlash   = lowerUrl.replace('https://', '').replace('http://', '').includes('//');
@@ -51,9 +51,14 @@ router.post('/', analysisRateLimit, async (req, res) => {
                 return char;
             }).join('');
             const regex = new RegExp(regexStr);
-            if (regex.test(domainName) && !domainName.includes(brand)) {
-                typosquatBrand = brand;
-                break;
+            if (regex.test(domainName)) {
+                const legitimateSuffixes = [`${brand}.com`, `${brand}.net`, `${brand}.org`, `${brand}.co.uk`];
+                const isLegit = legitimateSuffixes.some(suffix => domainName === suffix || domainName.endsWith(`.${suffix}`));
+                
+                if (!isLegit) {
+                    typosquatBrand = brand;
+                    break;
+                }
             }
         }
         const hasTyposquatting = typosquatBrand !== null;
@@ -76,7 +81,7 @@ router.post('/', analysisRateLimit, async (req, res) => {
         if (hasTyposquatting) { heuristicScore += 45; heuristicFlags.push(`Typosquatting: Looks like fake '${typosquatBrand}' domain`); }
 
         const score = Math.min(heuristicScore, 99);
-        const isSuspicious = score > 30;
+        const isSuspicious = score >= 30;
 
         // Build detections list
         const detections = [];

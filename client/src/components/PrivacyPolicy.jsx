@@ -1,6 +1,7 @@
+import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, Lock } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 
 const today = new Date().toLocaleDateString('en-US', {
   year: 'numeric',
@@ -9,6 +10,10 @@ const today = new Date().toLocaleDateString('en-US', {
 })
 
 export default function PrivacyPolicy() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-6 font-sans">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden">
@@ -22,8 +27,8 @@ export default function PrivacyPolicy() {
           </Link>
           
           <div className="relative z-10 flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm border border-white/20">
-               <Lock size={20} className="text-indigo-400" />
+            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center backdrop-blur-sm border border-white/20 overflow-hidden shrink-0 shadow-lg">
+               <img src="/logo.jpg" alt="PsyWall" className="w-full h-full object-cover" />
             </div>
             <div>
               <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest">Legal Document</p>

@@ -60,6 +60,52 @@ export default function Reports() {
     }
   };
 
+  const exportJSON = () => {
+    if (!reports.length) {
+      alert("No reports to export. Run a scan first.");
+      return;
+    }
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reports, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "psywall-threat-report.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  const exportCSV = () => {
+    if (!reports.length) {
+      alert("No reports to export. Run a scan first.");
+      return;
+    }
+    const headers = ["ID", "Subject", "Channel", "Risk", "Tactics", "Status", "Date"];
+    const rows = reports.map(r => [
+      r.id, 
+      `"${(r.label || r.subject || '').replace(/"/g, '""')}"`, 
+      r.channel || 'N/A', 
+      r.risk || 0, 
+      r.tactics || 0, 
+      r.status || 'Flagged', 
+      new Date(r.timestamp).toISOString()
+    ]);
+    
+    const csvContent = headers.join(",") + "\n" + rows.map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+      
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", url);
+    downloadAnchorNode.setAttribute("download", "psywall-threat-report.csv");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  const exportPDF = () => {
+    window.print();
+  };
+
   return (
     <div className="space-y-6">
       
@@ -109,15 +155,15 @@ export default function Reports() {
           <p className="text-xs text-gray-500 mb-6">Download a signed PDF or CSV of detected threats.</p>
           
           <div className="grid grid-cols-2 gap-4">
-            <button className="flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors">
+            <button onClick={exportPDF} className="flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors">
               <span className="text-sm font-bold text-gray-700">PDF</span>
               <span className="text-gray-400 font-serif">↓</span>
             </button>
-            <button className="flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors">
+            <button onClick={exportCSV} className="flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors">
               <span className="text-sm font-bold text-gray-700">CSV</span>
               <span className="text-gray-400 font-serif">↓</span>
             </button>
-            <button className="flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors">
+            <button onClick={exportJSON} className="flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors">
               <span className="text-sm font-bold text-gray-700">JSON</span>
               <span className="text-gray-400 font-serif">↓</span>
             </button>

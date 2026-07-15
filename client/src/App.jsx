@@ -8,6 +8,8 @@ import Documentation from './components/Documentation';
 import LandingPage from './components/sections/LandingPage';
 import StorageConsent from './components/StorageConsent';
 
+import Roadmap from './pages/Roadmap';
+
 import DashboardLayout from './components/layout/DashboardLayout';
 import Overview from './components/dashboard/Overview';
 import ThreatScanner from './components/dashboard/ThreatScanner';
@@ -82,6 +84,11 @@ const ROUTE_META = {
     title: 'Technical Documentation – PsyWall',
     description: 'Full technical documentation for PsyWall: API reference, integration guides, and system architecture.',
     path: '/documentation',
+  },
+  roadmap: {
+    title: 'Roadmap – PsyWall',
+    description: 'The future of Behavioral Cybersecurity. Explore the PsyWall engineering roadmap, live stats, and cognitive threat intelligence capabilities.',
+    path: '/roadmap',
   },
   terms: {
     title: 'Terms of Use – PsyWall',
@@ -165,6 +172,7 @@ function App() {
               <Route path="/settings" element={<ProtectedRoute><DashboardLayout title="Settings" subtitle="Tune PsyWall to your privacy, attention, and workflow."><Settings /></DashboardLayout></ProtectedRoute>} />
             
             <Route path="/tool-info" element={<ToolInfo />} />
+            <Route path="/roadmap" element={<ProtectedRoute><DashboardLayout title="Roadmap" subtitle="Building the Future of Human-Centric Security"><Roadmap /></DashboardLayout></ProtectedRoute>} />
             <Route path="/documentation" element={<Documentation />} />
             <Route path="/terms" element={<TermsOfUse />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />

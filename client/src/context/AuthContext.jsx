@@ -24,12 +24,37 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    let expiryTimeout;
+
+    const enforceExpiry = (session) => {
+      if (session?.user?.last_sign_in_at) {
+        const lastSignIn = new Date(session.user.last_sign_in_at).getTime();
+        const now = new Date().getTime();
+        const hours24 = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+        const timeElapsed = now - lastSignIn;
+        
+        if (timeElapsed >= hours24) {
+          supabase.auth.signOut();
+          return null;
+        } else {
+          // Schedule forced logout exactly at the 24-hour mark
+          const timeLeft = hours24 - timeElapsed;
+          if (expiryTimeout) clearTimeout(expiryTimeout);
+          expiryTimeout = setTimeout(() => {
+            supabase.auth.signOut();
+          }, timeLeft);
+        }
+      }
+      return session;
+    };
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id).finally(() => setLoading(false));
+      const validSession = enforceExpiry(session);
+      setSession(validSession);
+      setUser(validSession?.user ?? null);
+      if (validSession?.user) {
+        fetchProfile(validSession.user.id).finally(() => setLoading(false));
       } else {
         setLoading(false);
       }
@@ -37,18 +62,23 @@ export const AuthProvider = ({ children }) => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
+      const validSession = enforceExpiry(session);
+      setSession(validSession);
+      setUser(validSession?.user ?? null);
+      if (validSession?.user) {
         setLoading(true);
-        fetchProfile(session.user.id).finally(() => setLoading(false));
+        fetchProfile(validSession.user.id).finally(() => setLoading(false));
       } else {
         setProfile(null);
         setLoading(false);
+        if (expiryTimeout) clearTimeout(expiryTimeout);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      if (expiryTimeout) clearTimeout(expiryTimeout);
+    };
   }, []);
 
   const signUp = async (email, password, username) => {

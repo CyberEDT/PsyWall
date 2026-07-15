@@ -66,7 +66,7 @@ export default function ThreatScanner() {
         payload = resData;
         if (payload.status === 'success') {
           score = payload.riskAnalysis.score;
-          targetText = payload.extractedText; // Override for storage
+          targetText = payload.extractedText || targetText; // Override for storage
         }
       } catch (err) {
         payload = { error: "Failed to connect to Vision OCR API. Ensure backend is running." };
@@ -122,7 +122,7 @@ export default function ThreatScanner() {
         const newReport = {
           id: scanId,
           subject: payload.alertPayload?.title || 'Scan Result',
-          channel: scanMode === 'text' ? 'Text/SMS' : scanMode === 'url' ? 'URL' : 'Image/OCR',
+          channel: scanMode === 'text' ? 'Text/SMS' : scanMode === 'url' ? 'URL' : 'Vision AI',
           risk: score,
           tactics: payload.detections?.length || 0,
           status: score > 70 ? 'Blocked' : score > 35 ? 'Flagged' : 'Safe',
@@ -315,7 +315,7 @@ export default function ThreatScanner() {
                       reportThreat({
                         type: 'danger',
                         label: result.alertPayload?.title || 'Community Reported Threat',
-                        payload_data: scanMode === 'text' ? inputText : scanMode === 'url' ? urlInput : imageFile?.name || 'Uploaded Screenshot',
+                        payload_data: scanMode === 'image' ? (result.extractedText || imageFile?.name) : (scanMode === 'text' ? inputText : urlInput),
                         channel: scanMode === 'text' ? 'Scanner' : scanMode === 'url' ? 'URL Intel' : 'Vision AI',
                         contact: 'Anonymous User',
                         risk: result.riskAnalysis?.score,

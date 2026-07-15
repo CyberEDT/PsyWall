@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Bell, ShieldCheck, X, AlertTriangle, MessageSquare } from 'lucide-react';
+import { Search, Bell, ShieldCheck, X, AlertTriangle, MessageSquare, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNotifications } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
@@ -11,9 +11,11 @@ const iconMap = {
   MessageSquare
 };
 
-const TopNavbar = ({ title, subtitle }) => {
+const TopNavbar = ({ title, subtitle, onMenuClick }) => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { notifications, unreadCount, markAllRead, dismissNotification, clearAll } = useNotifications();
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
@@ -42,30 +44,99 @@ const TopNavbar = ({ title, subtitle }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const searchItems = [
+    { label: 'Dashboard', path: '/dashboard', type: 'Page' },
+    { label: 'Threat Scanner', path: '/scanner', type: 'Tool' },
+    { label: 'Manipulation Detection', path: '/manipulation', type: 'Page' },
+    { label: 'Reports & Logs', path: '/reports', type: 'Page' },
+    { label: 'Awareness Center', path: '/awareness', type: 'Training' },
+    { label: 'Platform Settings', path: '/settings', type: 'Config' },
+    { label: 'Logout', action: handleLogout, type: 'Action' }
+  ];
+
+  const filteredSearch = searchQuery 
+    ? searchItems.filter(item => item.label.toLowerCase().includes(searchQuery.toLowerCase()) || item.type.toLowerCase().includes(searchQuery.toLowerCase()))
+    : [];
+
+  const handleSearchClick = (item) => {
+    if (item.action) {
+      item.action();
+    } else if (item.path) {
+      navigate(item.path);
+    }
+    setSearchQuery('');
+    setIsSearchOpen(false);
+  };
+
   return (
-    <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 sticky top-0 z-10">
+    <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-8 sticky top-0 z-10">
       {/* Page Title Area */}
-      <div>
-        <h2 className="text-lg font-bold text-gray-900 leading-tight">{title}</h2>
-        {subtitle && <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>}
+      <div className="flex items-center gap-3">
+        <button 
+          onClick={onMenuClick}
+          className="md:hidden p-2 -ml-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <Menu size={20} />
+        </button>
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 leading-tight">{title}</h2>
+          {subtitle && <p className="text-xs text-gray-500 mt-0.5 hidden sm:block">{subtitle}</p>}
+        </div>
       </div>
 
       {/* Right Controls Area */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-3 md:gap-6">
         {/* Search */}
-        <div className="relative">
+        <div className="relative hidden sm:block">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input 
             type="text" 
-            placeholder="Search threats, reports, tactics..." 
-            className="w-64 pl-9 pr-12 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-gray-400 text-gray-700"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setIsSearchOpen(true);
+            }}
+            onFocus={() => setIsSearchOpen(true)}
+            onBlur={() => setTimeout(() => setIsSearchOpen(false), 200)}
+            placeholder="Search..." 
+            className="w-40 md:w-64 pl-9 pr-12 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-gray-400 text-gray-700"
           />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-1">
             <kbd className="px-1.5 py-0.5 text-[10px] font-sans font-semibold text-gray-500 bg-white border border-gray-200 rounded shadow-sm">⌘K</kbd>
           </div>
+          
+          <AnimatePresence>
+            {isSearchOpen && searchQuery && (
+              <motion.div 
+                initial={{ opacity: 0, y: 5 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                exit={{ opacity: 0, y: 5 }}
+                className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-gray-100 overflow-hidden z-50"
+              >
+                {filteredSearch.length > 0 ? (
+                  <div className="py-2">
+                    {filteredSearch.map((item, idx) => (
+                      <button 
+                        key={idx}
+                        onMouseDown={() => handleSearchClick(item)}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center justify-between transition-colors"
+                      >
+                        <span className="text-sm font-semibold text-gray-700">{item.label}</span>
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{item.type}</span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-4 py-6 text-center text-gray-500 text-sm">
+                    No results found for "{searchQuery}"
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        <div className="w-px h-6 bg-gray-200" />
+        <div className="hidden md:block w-px h-6 bg-gray-200" />
 
         {/* Status Badge */}
         <div className="hidden md:flex items-center gap-1.5 bg-green-50 border border-green-200 px-3 py-1 rounded-full">
@@ -148,7 +219,7 @@ const TopNavbar = ({ title, subtitle }) => {
         </div>
 
         {/* User Actions */}
-        <div className="relative flex items-center pl-4 border-l border-gray-200" ref={profileRef}>
+        <div className="relative flex items-center md:pl-4 md:border-l border-gray-200" ref={profileRef}>
           <div 
             className="cursor-pointer"
             onClick={() => setIsProfileOpen(!isProfileOpen)}

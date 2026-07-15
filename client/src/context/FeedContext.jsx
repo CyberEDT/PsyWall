@@ -28,7 +28,7 @@ export const FeedProvider = ({ children }) => {
         .order('created_at', { ascending: false })
         .limit(50);
         
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         // Map to match frontend component structure
         const formatted = data.map(r => ({
           id: r.id,
@@ -37,12 +37,43 @@ export const FeedProvider = ({ children }) => {
           channel: 'Scanner',
           contact: r.user_profiles?.username || 'Anonymous',
           timestamp: new Date(r.created_at).getTime(),
-          risk: 0, // Fallback for UI if not stored
+          risk: 0,
           tactics: 0,
           status: r.status,
           scan_id: r.scan_id
         }));
         setThreats(formatted);
+      } else {
+        // Fallback to active simulation mode for MVP / local testing
+        const initialMocks = [
+          { id: 'mock-1', type: 'danger', label: 'Suspicious Wire Transfer Request', channel: 'Email Gateway', contact: 'Automated Agent', timestamp: Date.now() - 1000 * 60 * 2, status: 'pending' },
+          { id: 'mock-2', type: 'warning', label: 'Anomalous VPN Login (Location: RU)', channel: 'Identity Access', contact: 'System', timestamp: Date.now() - 1000 * 60 * 15, status: 'investigating' },
+          { id: 'mock-3', type: 'danger', label: 'CEO Impersonation Detected', channel: 'Slack Monitor', contact: 'PsyWall Bot', timestamp: Date.now() - 1000 * 60 * 45, status: 'pending' },
+        ];
+        setThreats(initialMocks);
+
+        // Periodically inject new mock threats to make the feed feel alive
+        const mockThreats = [
+          { type: 'danger', label: 'Spear Phishing Link Clicked', channel: 'Endpoint Agent' },
+          { type: 'warning', label: 'High Urgency Email Received', channel: 'Email Gateway' },
+          { type: 'danger', label: 'Credential Dumping Tool Detected', channel: 'Endpoint Agent' },
+          { type: 'warning', label: 'Unusual Bulk Download', channel: 'Cloud Storage' },
+          { type: 'danger', label: 'Multi-Factor Auth Bypass Attempt', channel: 'Identity Access' }
+        ];
+        
+        setInterval(() => {
+          setThreats(prev => {
+            const randomThreat = mockThreats[Math.floor(Math.random() * mockThreats.length)];
+            const newThreat = {
+              id: `mock-auto-${Date.now()}`,
+              ...randomThreat,
+              contact: 'PsyWall Auto-Scanner',
+              timestamp: Date.now(),
+              status: 'pending'
+            };
+            return [newThreat, ...prev].slice(0, 50);
+          });
+        }, 35000); // New simulated threat every 35 seconds
       }
     };
 
