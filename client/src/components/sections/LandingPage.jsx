@@ -362,7 +362,7 @@ export default function LandingPage() {
           <div className="flex gap-6">
             <button onClick={() => navigate('/privacy')} className="hover:text-slate-300 transition-colors">Privacy</button>
             <button onClick={() => navigate('/terms')} className="hover:text-slate-300 transition-colors">Terms</button>
-            <button onClick={() => navigate('/documentation')} className="hover:text-slate-300 transition-colors">Research</button>
+            <button onClick={() => navigate('/documentation')} className="hover:text-slate-300 transition-colors">Ongoing</button>
           </div>
         </div>
       </footer>
